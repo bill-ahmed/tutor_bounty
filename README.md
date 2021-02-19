@@ -46,6 +46,7 @@ Set up recurring meetings, if desired.
 ### Front-end:
 * VueJS
 * Quasar.js UI framework
+* WebRTC for video chat (Peer JS)
 
 ### Other
 * Hosting via Digital Ocean
