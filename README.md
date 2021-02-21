@@ -5,9 +5,9 @@ Tutor Bounty
 Raiyan Rahman, Bilal Ahmed, Yiming Zhong
 
 ## Description
-An online platform where students/professionals can offer to teach students seeking to learn more about an area of interest, study for an exam, etc. Kind of like Uber but for online learning.
+An online platform where students/professionals can offer to teach students seeking to learn more about an area of interest, study for an exam, etc. ~~Kind of like Uber but for online learning.~~
 
-Students would post a “request” for a specific course and topic, and also assign a monetary value to it (could also be $0 i.e. seeking volunteers only). This would be broadcasted and available for any other students/professional that are knowledgeable about the posting.
+Students would post a “request” for a specific course and topic on the posting board, and also assign a monetary value to it (could also be $0 i.e. seeking volunteers only). This would also be broadcasted and available for any other students/professional that are knowledgeable about the posting.
 
 Upon accepting, a chatroom + video area would be allocated where the student and instructor can interact.
 
