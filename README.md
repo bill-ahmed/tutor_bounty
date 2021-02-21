@@ -40,16 +40,16 @@ Set up recurring meetings, if desired.
 
 ### Backend:
 * Express server + typescript
+* Oauth 2 for local/third-party sign up/sign in
 * A cluster of server instances to occupy all available threads
-* Sending email notifications such as when signing up
 
 ### Front-end:
-* VueJS
-* Quasar.js UI framework
+* VueJS (v2)
 * WebRTC for video chat (Peer JS)
 
+
 ### Other
-* Hosting via Digital Ocean
+* Hosting via one of: Heroku, Digital Ocean, Google Cloud web hosting
 * Build docker image for server before deployment
 * Free domain name via NameCheap student discount + free SSL via certbot
 
