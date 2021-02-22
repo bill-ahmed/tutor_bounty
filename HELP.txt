@@ -1,4 +1,4 @@
-To run the app locally, we need to separate terminals.
+To run the app locally, we need two separate terminals.
 
 In the first terminal:
     1. Go to project directory
