@@ -7,6 +7,7 @@ import User from "./models/user/user.model";
 import UserRouter from "./routes/user.route";
 import { MIN_PASSWORD_LENGTH, SESSION_NAME } from "./utils/constants";
 import { hashAndSalt } from "./utils/crypto";
+import { applicationRoot, isProdEnv } from "./utils/utils";
 
 const bodyParser = require('body-parser');
 
@@ -15,7 +16,7 @@ const ApplicationRouter = Router();
 
 ApplicationRouter.get('/isAlive', (req, res) => { console.log('request user: ', req.user); res.status(200).send('Application router alive!'); })
 
-/** Login existing user
+/** Login existing local user
  * @route POST /api/login
  */
 ApplicationRouter.post('/login', bodyParser.json(), async (req, res, next) => {
@@ -48,7 +49,7 @@ ApplicationRouter.post('/login', bodyParser.json(), async (req, res, next) => {
     })(req, res, next);
 })
 
-/** Sign up a new user
+/** Sign up a new local user
  * @route POST /api/signup
  */
 ApplicationRouter.post('/signup', bodyParser.json(), async (req, res) => {
@@ -86,6 +87,22 @@ ApplicationRouter.post('/signup', bodyParser.json(), async (req, res) => {
             res.sendStatus(500);
         }
     }
+});
+
+/** Sign in Google Account user
+ * @route /api/auth/google
+ */
+ApplicationRouter.get('/auth/google', passport.authenticate('google', { scope: [ 'email', 'profile' ] }));
+
+
+ /** Callback for when sign in complete
+  * @route /api/auth/google/callback
+  */
+ApplicationRouter.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: applicationRoot() }), async (req, res) => {
+  Logger.debug('Callback triggered from Google sign in!');
+  
+
+  return res.redirect(applicationRoot());
 });
 
 /** Logout current user

@@ -14,6 +14,7 @@ import passport from 'passport';
 import setupAuth from './auth/setupAuth';
 import { SESSION_MAX_AGE, SESSION_NAME } from './utils/constants';
 import RedisClient from './utils/redis';
+import { isProdEnv } from './utils/utils';
 
 const app = express();
 
@@ -27,9 +28,6 @@ const PORT = parseInt(process.env.PORT) || 3000;
 
 // Persist sessions
 const RedisStore = require('connect-redis')(session)
-
-/** Helpers **/
-const isProdEnv = () => { return process.env.NODE_ENV === 'production' }
 
 async function bootstrap()
 {

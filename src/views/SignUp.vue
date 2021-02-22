@@ -1,24 +1,35 @@
 <template>
-    <div>
-        <h2> Sign up </h2>
-        <form>
-            <div>
-                <label>Email:</label>
-                <input type="text" name="email" v-model="email"/>
-            </div>
-            <div>
-                <label>Password:</label>
-                <input type="password" name="password" v-model="password"/>
-            </div>
-            <div>
-                <label>Confirm password:</label>
-                <input type="password" name="password" v-model="confirmPassword"/>
-            </div>
-        </form>
-        <div>
-            <button v-on:click="signup()">Sign Up</button>
+  <div class="columns">
+    <div class="column"></div>
+    <div class="column tile is-3 is-ancestoris-vertical box">
+        <div class="column">
+          <div class="has-text-centered">
+            <p class="title"> Sign Up </p>
+            <p class="subtitle"> Create an account by filling out below. </p>
+          </div>
+          <br/>
+          
+          <b-field label="Name">
+            <b-input type="text" v-model="name"></b-input>
+          </b-field>
+
+          <b-field label="Email">
+            <b-input type="email" v-model="email"></b-input>
+          </b-field>
+
+          <b-field label="Password">
+            <b-input type="password" v-model="password"></b-input>
+          </b-field>
+          
+          <b-field label="Confirm Password">
+            <b-input type="password" v-model="confirmPassword"></b-input>
+          </b-field>
+
+          <b-button expanded type="is-success is-outlined" v-on:click="signup()" :loading="loading">Sign Up</b-button>
         </div>
     </div>
+    <div class="column"></div>
+  </div>
 </template>
 
 <script>
@@ -27,13 +38,27 @@ export default {
         return {
             email: '',
             password: '',
-            confirmPassword: ''
+            confirmPassword: '',
+            name: '',
+            loading: false
         }
     },
     methods: {
         async signup() {
-            let res = await this.axios.post('/signup', { email: this.email, password: this.password, confirmPassword: this.confirmPassword });
-            console.log(res.data);
+          this.loading = true;
+
+          try {
+            await this.axios.post('/signup', { 
+              email: this.email, 
+              password: this.password, 
+              confirmPassword: this.confirmPassword,
+              name: this.name
+            });
+          } catch (error) {
+            // TODO: Error handling
+          } finally {
+            this.loading = false; 
+          }
         }
     }
 }
