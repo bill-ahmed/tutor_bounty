@@ -3,10 +3,25 @@
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
+      <button v-on:click="pingServer()">ping server</button>
     </div>
     <router-view/>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return { }
+  },
+  methods: {
+    async pingServer() {
+      const result = await this.axios.get('http://127.0.0.1:3000/isAlive');
+      console.log(result.data);
+    }
+  }
+}
+</script>
 
 <style lang="scss">
 #app {
