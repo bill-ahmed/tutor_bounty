@@ -1,5 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { check, sanitize, validationResult } from "express-validator";
+import passport from "passport";
 import Logger from "./Logger";
 import User from "./models/user/user.model";
 
@@ -12,9 +13,44 @@ const bodyParser = require('body-parser');
 /** A router for the back-end API server */
 const ApplicationRouter = Router();
 
-ApplicationRouter.get('/isAlive', (req, res) => { res.status(200).send('Alive!'); })
+ApplicationRouter.get('/isAlive', (req, res) => { console.log('request user: ', req.user); res.status(200).send('Application router alive!'); })
 
-// Actions for login/sign up
+/** Login existing user
+ * @route POST /api/login
+ */
+ApplicationRouter.post('/login', bodyParser.json(), async (req, res, next) => {
+    await check('email', 'Email is not valid!').isEmail().normalizeEmail().run(req);
+    await check('password', `Password must be present!`).isLength({ min: 1 }).run(req);
+
+    const errors = validationResult(req);
+    if(!errors.isEmpty())
+    {
+        return res.sendStatus(400);
+    }
+
+    // Kick em out if already logged in!
+    req.logout();
+
+    Logger.debug(`Authenticating user: ${req.body.email}`);
+    passport.authenticate('local', (err, user, msg) => {
+        if(err)
+            return res.sendStatus(500);
+        
+        // If user doesn't exist or invalid password
+        if(!user)
+            return res.status(404).json(msg);
+        
+        req.login(user, (err) => {
+            if(err)
+                return res.sendStatus(500);
+            return res.sendStatus(200);
+        })
+    })(req, res, next);
+})
+
+/** Sign up a new user
+ * @route POST /api/signup
+ */
 ApplicationRouter.post('/signup', bodyParser.json(), async (req, res) => {
     Logger.debug(JSON.stringify(req.body));
 
@@ -51,6 +87,14 @@ ApplicationRouter.post('/signup', bodyParser.json(), async (req, res) => {
         }
     }
 });
+
+/** Logout current user
+ * @route /api/logout
+ */
+ApplicationRouter.post('/logout', (req, res) => {
+    req.logout();
+    res.sendStatus(200);
+})
 
 // Map controllers
 ApplicationRouter.use('/users', UserRouter);

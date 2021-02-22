@@ -2,7 +2,7 @@
     <div>
         <h2> Sign up </h2>
         <form>
-             <div>
+            <div>
                 <label>Email:</label>
                 <input type="text" name="email" v-model="email"/>
             </div>

@@ -8,8 +8,16 @@ import cors from 'cors';
 import Logger from './Logger';
 import ApplicationRouter from './applicationRouter';
 import init from './init';
+import { body } from 'express-validator';
+import passport from 'passport';
+
+import setupAuth from './auth/setupAuth';
 
 const app = express();
+
+const session = require('express-session');
+const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser')
 
 /** Constants **/
 const HOST = process.env.HOST || '127.0.0.1';
@@ -24,6 +32,20 @@ async function bootstrap()
     
     app.use(helmet());
 
+    setupAuth();
+
+    // Authentication middleware
+    app.use(cookieParser());
+    app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+    }));
+    app.use(passport.initialize());
+    app.use(passport.session());
+
+
     /** TODO: Configure allowed request origins for production */
     if(!isProdEnv())
     {
@@ -31,6 +53,10 @@ async function bootstrap()
     }
     else
     {
+        // Enable secure cookie from first proxy (something like Nginx preferably)
+        app.set('trust proxy', 1);
+        session.cookie.secure = true;
+
         // Configure for prod
         const viewPath = path.join(__dirname, 'views');
         app.use(express.static(viewPath));
