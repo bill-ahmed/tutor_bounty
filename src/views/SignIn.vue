@@ -8,8 +8,8 @@
             <p class="subtitle"> Sign in to continue. </p>
           </div>
           <br/>
-          <a href="/api/auth/google">google</a>
-          <b-button expanded rounded type="is-outlined">Continue with Google</b-button>
+
+          <b-button expanded rounded type="is-outlined" @click="googleLogin()">Sign In with Google</b-button>
 
           <hr/>
 
@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import { SignInWithGoogle } from '@/utils/auth';
+
 export default {
   data() {
     return {
@@ -53,8 +55,8 @@ export default {
         this.loading = false;
       }
     },
-    async googleLogin() {
-      this.isloading = true;
+    googleLogin() {
+      SignInWithGoogle();
     }
   }
 }

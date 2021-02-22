@@ -8,6 +8,10 @@
             <p class="subtitle"> Create an account by filling out below. </p>
           </div>
           <br/>
+
+          <b-button expanded rounded type="is-outlined" @click="googleLogin()">Sign Up with Google</b-button>
+
+          <hr/>
           
           <b-field label="Name">
             <b-input type="text" v-model="name"></b-input>
@@ -33,6 +37,8 @@
 </template>
 
 <script>
+import { SignInWithGoogle } from '@/utils/auth';
+
 export default {
     data() {
         return {
@@ -44,22 +50,25 @@ export default {
         }
     },
     methods: {
-        async signup() {
-          this.loading = true;
+      async signup() {
+        this.loading = true;
 
-          try {
-            await this.axios.post('/signup', { 
-              email: this.email, 
-              password: this.password, 
-              confirmPassword: this.confirmPassword,
-              name: this.name
-            });
-          } catch (error) {
-            // TODO: Error handling
-          } finally {
-            this.loading = false; 
-          }
+        try {
+          await this.axios.post('/signup', { 
+            email: this.email, 
+            password: this.password, 
+            confirmPassword: this.confirmPassword,
+            name: this.name
+          });
+        } catch (error) {
+          // TODO: Error handling
+        } finally {
+          this.loading = false; 
         }
+      },
+      googleLogin() {
+        SignInWithGoogle();
+      }
     }
 }
 </script>

@@ -32,9 +32,7 @@ export default function setupAuth() {
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbackURL: process.env.GOOGLE_CALLBACK_URL
       },
-      async function(accessToken, refreshToken, profile, done) {
-        console.log(JSON.stringify({ accessToken, refreshToken, profile }));
-        
+      async function(accessToken, refreshToken, profile, done) {        
         let user = await User.findOne({ authId: profile.id });
         if(user)
         {
@@ -48,7 +46,8 @@ export default function setupAuth() {
           user = await User.create({
             email, emailVerified,
             name: profile.displayName,
-            profileImageURL: profile._json.picture
+            profileImageURL: profile._json.picture,
+            authId: profile.id
           });
 
           await user.save();
