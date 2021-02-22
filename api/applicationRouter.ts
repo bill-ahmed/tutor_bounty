@@ -5,7 +5,7 @@ import Logger from "./utils/logger";
 import User from "./models/user/user.model";
 
 import UserRouter from "./routes/user.route";
-import { MIN_PASSWORD_LENGTH } from "./utils/constants";
+import { MIN_PASSWORD_LENGTH, SESSION_NAME } from "./utils/constants";
 import { hashAndSalt } from "./utils/crypto";
 
 const bodyParser = require('body-parser');
@@ -92,7 +92,8 @@ ApplicationRouter.post('/signup', bodyParser.json(), async (req, res) => {
  * @route /api/logout
  */
 ApplicationRouter.post('/logout', (req, res) => {
-    req.logout();
+    // TODO: Also nuke session from redis
+    req.logout();    
     res.sendStatus(200);
 })
 

@@ -12,7 +12,7 @@ import { body } from 'express-validator';
 import passport from 'passport';
 
 import setupAuth from './auth/setupAuth';
-import { SESSION_MAX_AGE } from './utils/constants';
+import { SESSION_MAX_AGE, SESSION_NAME } from './utils/constants';
 import RedisClient from './utils/redis';
 
 const app = express();
@@ -50,7 +50,7 @@ async function bootstrap()
         cookie: {
             maxAge: SESSION_MAX_AGE
         },
-        name: 'tutor_bounty.sid',
+        name: SESSION_NAME,
         store: new RedisStore({ client: RedisClient, ttl: SESSION_MAX_AGE })
     }));
     app.use(passport.initialize());
