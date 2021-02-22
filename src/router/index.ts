@@ -9,6 +9,9 @@ Vue.use(VueRouter)
  * @description All routes are open to public!! To restrict to only logged-in users,
  *              add a 'meta' property of: { auth: true }. Use an auth value of 'public' 
  *              to prevent logged-in users from accessing the route.
+ * 
+ * @see https://router.vuejs.org/guide/advanced/meta.html
+ * 
  */
 const routes: Array<RouteConfig> = [
   {
@@ -48,7 +51,12 @@ const router = new VueRouter({
   routes
 })
 
-// Actions to take before rendering next route
+/**
+ * Actions to take before rendering next route
+ * 
+ * @see https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
+ * 
+ */
 router.beforeEach(async (to, from, next) => {
   var user;
 

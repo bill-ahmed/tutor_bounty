@@ -12,19 +12,20 @@
           <b-button tag="router-link" to="/"> Home </b-button>
         </div>
 
-        <div class="level-item">
+        <div v-if="!$currentUser" class="level-item">
           <b-button tag="router-link" type="is-info is-outlined" to="/signin"> Login </b-button>
         </div>
 
-        <div class="level-item">
+        <div v-if="!$currentUser" class="level-item">
           <b-button tag="router-link" type="is-success is-outlined" to="/signup"> Sign Up </b-button>
         </div>
 
-        <div class="level-item">
+        <div v-if="$currentUser" class="level-item">
           <b-button type="is-warning" v-on:click="logout()">Logout</b-button>
         </div>
-        <b-button v-on:click="pingServer()">ping server</b-button>
-        <b-button v-on:click="test()">test</b-button>
+
+        <!-- <b-button v-on:click="pingServer()">ping server</b-button>
+        <b-button v-on:click="test()">test</b-button> -->
       </div>
     </div>
     <router-view/>
