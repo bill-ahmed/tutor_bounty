@@ -1,3 +1,5 @@
+Prior to running the app, we need to boot the services we rely on. To do this, run: `docker-compose up -d`. This may take a while!
+
 To run the app locally, we need two separate terminals.
 
 In the first terminal:
