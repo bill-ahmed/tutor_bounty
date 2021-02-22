@@ -7,6 +7,7 @@ import cors from 'cors';
 
 import Logger from './Logger';
 import ApplicationRouter from './applicationRouter';
+import init from './init';
 
 const app = express();
 
@@ -35,8 +36,10 @@ async function bootstrap()
 
         app.get('/', (req, res) => { res.sendFile(viewPath + 'index.html'); });
     }
-
+    
     app.use('/api', ApplicationRouter);
+
+    await init();
     app.listen(PORT, HOST, () => { Logger.info(`Server listening on: http://${HOST}:${PORT}!`) });
 }
 
