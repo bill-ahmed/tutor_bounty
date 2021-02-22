@@ -16,7 +16,7 @@ export default {
   },
   methods: {
     async pingServer() {
-      const result = await this.axios.get('http://127.0.0.1:3000/isAlive');
+      const result = await this.axios.get('/isAlive');
       console.log(result.data);
     }
   }
