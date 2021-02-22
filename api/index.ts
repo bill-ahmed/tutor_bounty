@@ -21,12 +21,13 @@ const isProdEnv = () => { return process.env.NODE_ENV === 'production' }
 async function bootstrap()
 {
     Logger.info(`Is production: ${isProdEnv()}`);
+    
     app.use(helmet());
 
     /** TODO: Configure allowed request origins for production */
     if(!isProdEnv())
     {
-        Logger.warn('Enabling CORS!');
+        app.use((req, res, next) => { Logger.debug(`[${req.method}] ${req.url}`); next(); });
     }
     else
     {
@@ -38,6 +39,7 @@ async function bootstrap()
     }
     
     app.use('/api', ApplicationRouter);
+    app.use((req, res) => { res.sendStatus(404); });
 
     await init();
     app.listen(PORT, HOST, () => { Logger.info(`Server listening on: http://${HOST}:${PORT}!`) });

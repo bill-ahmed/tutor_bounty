@@ -1,12 +1,11 @@
 import mongoose from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
 import { prop, plugin, index, getModelForClass, Ref } from '@typegoose/typegoose';
+import { isEqual } from '../../utils/crypto';
 
-@index({ username: 1, email: 1 }, { unique: true })
+@index({ email: 1 }, { unique: true })
 @plugin(uniqueValidator)
 class UserClass {
-    @prop({ required: true, uniqueCaseInsensitive: true })
-    username!: string
 
     @prop({ required: true })
     password!: string
@@ -20,10 +19,14 @@ class UserClass {
 
     @prop({ })
     lastName: string;
+
+    public validPassword(pass: string): boolean {
+        return isEqual(pass, this.password);
+    }
 }
 
 /** Add validations **/
 
 /** User model. */
-const User = getModelForClass(UserClass);
+const User = getModelForClass(UserClass, { schemaOptions: { timestamps: true } });
 export default User;

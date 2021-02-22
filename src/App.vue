@@ -2,7 +2,8 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/about">About</router-link> |
+      <router-link to="/signup">Sign Up</router-link>
       <button v-on:click="pingServer()">ping server</button>
     </div>
     <router-view/>
@@ -16,7 +17,7 @@ export default {
   },
   methods: {
     async pingServer() {
-      const result = await this.axios.get('/isAlive');
+      const result = await this.axios.get('/users/isAlive');
       console.log(result.data);
     }
   }
