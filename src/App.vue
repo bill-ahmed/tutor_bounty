@@ -24,6 +24,7 @@
           <b-button type="is-warning" v-on:click="logout()">Logout</b-button>
         </div>
         <b-button v-on:click="pingServer()">ping server</b-button>
+        <b-button v-on:click="test()">test</b-button>
       </div>
     </div>
     <router-view/>
@@ -46,7 +47,10 @@ export default {
     },
     async logout() {
       const result = await this.axios.post('/logout');
-      console.log('Logged out!', result.data);
+      this.$router.push('/signin')
+    },
+    test() {
+      console.log(this.$currentUser);
     }
   }
 }

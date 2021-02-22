@@ -5,6 +5,7 @@ import store from './store'
 
 import './style';
 import './axios';
+import './plugins/CurrentUser';
 
 Vue.config.productionTip = false
 

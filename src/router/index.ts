@@ -1,3 +1,4 @@
+import axios from 'axios'
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Home from '../views/Home.vue'
@@ -34,6 +35,20 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+// Actions to take before rendering next route
+router.beforeEach(async (to, from, next) => {
+  // Update currentUser
+  try {
+    let result = await axios.get('/currentUser');
+    Vue.prototype.$currentUser = result.data || null;
+
+  } catch (error) {
+    Vue.prototype.$currentUser = null; 
+  }
+
+  next();
 })
 
 export default router

@@ -114,6 +114,11 @@ ApplicationRouter.post('/logout', (req, res) => {
     res.sendStatus(200);
 })
 
+/** Current user, if logged in */
+ApplicationRouter.use('/currentUser', (req, res) => {
+  return res.json(req.user);
+});
+
 // Map controllers
 ApplicationRouter.use('/users', UserRouter);
 

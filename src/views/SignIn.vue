@@ -51,9 +51,9 @@ export default {
       } catch (error) {
         // TODO: error handling
 
-      } finally {
-        this.loading = false;
       }
+      this.$router.push('/');
+      this.loading = false;
     },
     googleLogin() {
       SignInWithGoogle();
