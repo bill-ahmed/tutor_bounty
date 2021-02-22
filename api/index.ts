@@ -5,13 +5,15 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 
-import Logger from './Logger';
+import Logger from './utils/logger';
 import ApplicationRouter from './applicationRouter';
 import init from './init';
 import { body } from 'express-validator';
 import passport from 'passport';
 
 import setupAuth from './auth/setupAuth';
+import { SESSION_MAX_AGE } from './utils/constants';
+import RedisClient from './utils/redis';
 
 const app = express();
 
@@ -22,6 +24,9 @@ const bodyParser = require('body-parser')
 /** Constants **/
 const HOST = process.env.HOST || '127.0.0.1';
 const PORT = parseInt(process.env.PORT) || 3000;
+
+// Persist sessions
+const RedisStore = require('connect-redis')(session)
 
 /** Helpers **/
 const isProdEnv = () => { return process.env.NODE_ENV === 'production' }
@@ -40,7 +45,13 @@ async function bootstrap()
     app.use(session({
         secret: process.env.SESSION_SECRET,
         resave: false,
+        rolling: true,
         saveUninitialized: false,
+        cookie: {
+            maxAge: SESSION_MAX_AGE
+        },
+        name: 'tutor_bounty.sid',
+        store: new RedisStore({ client: RedisClient, ttl: SESSION_MAX_AGE })
     }));
     app.use(passport.initialize());
     app.use(passport.session());

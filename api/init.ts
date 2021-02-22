@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import Logger from './Logger';
+import Logger from './utils/logger';
 
 // Import all models
 import './models';

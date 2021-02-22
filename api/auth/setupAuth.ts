@@ -1,6 +1,6 @@
 import passport from 'passport'
 import passportLocal from "passport-local";
-import Logger from '../Logger';
+import Logger from '../utils/logger';
 import User from '../models/user/user.model';
 
 const LocalStrategy = passportLocal.Strategy

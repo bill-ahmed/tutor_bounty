@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { check, sanitize, validationResult } from "express-validator";
 import passport from "passport";
-import Logger from "./Logger";
+import Logger from "./utils/logger";
 import User from "./models/user/user.model";
 
 import UserRouter from "./routes/user.route";
