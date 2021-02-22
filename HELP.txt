@@ -4,10 +4,12 @@ To run the app locally, we need two separate terminals.
 
 In the first terminal:
     1. Go to project directory
-    2. Run: npm start
-    3. Any code changes you make to front-end will hot-reload!
+    2. Run: npm install
+    3. Run: npm start
+    4. Any code changes you make to front-end will hot-reload!
 
 In the second terminal:
     1. Go to project directly, then cd inside `api` folder
-    2. Run: npm start
-    3. Any code changes to server will also hot-reload
+    2. Run: npm install
+    3. Run: npm start
+    4. Any code changes to server will also hot-reload
