@@ -1,0 +1,8 @@
+FROM redis:6.0.8-buster
+
+# Bring over Redis configuration
+COPY config/redis.conf /usr/local/etc/redis/redis.conf
+
+EXPOSE 6379
+
+CMD [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
