@@ -122,4 +122,7 @@ ApplicationRouter.use('/currentUser', (req, res) => {
 // Map controllers
 ApplicationRouter.use('/users', UserRouter);
 
+// All other routes are dead ends
+ApplicationRouter.use('*', (req, res) => { res.sendStatus(404); });
+
 export default ApplicationRouter;

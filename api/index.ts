@@ -74,7 +74,10 @@ async function bootstrap()
     }
     
     app.use('/api', ApplicationRouter);
-    app.use((req, res) => { res.sendStatus(404); });
+
+    // Let vue-router handle 404s
+    // This was needed because we disabled history api: https://router.vuejs.org/guide/essentials/history-mode.html#caveat
+    app.use((req, res) => { res.redirect('/#' + req.url); });
 
     await init();
     app.listen(PORT, HOST, () => { Logger.info(`Server listening on: http://${HOST}:${PORT}!`) });

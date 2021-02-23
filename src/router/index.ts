@@ -1,7 +1,9 @@
 import axios from 'axios'
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
+
 import Home from '../views/Home.vue'
+import NotFound from '../views/404.vue'
 
 Vue.use(VueRouter)
 
@@ -42,11 +44,15 @@ const routes: Array<RouteConfig> = [
       auth: 'public'    /** Only allow user that are NOT logged-in. */
     },
     component: () => import('../views/SignIn.vue')
+  },
+  {
+    path: '*',
+    component: NotFound
   }
 ]
 
 const router = new VueRouter({
-  // mode: 'history',
+  // mode: 'history',           /** Don't use history API: https://router.vuejs.org/guide/essentials/history-mode.html#caveat */
   base: process.env.BASE_URL,
   routes
 })
