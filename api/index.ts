@@ -46,7 +46,8 @@ async function bootstrap()
         rolling: true,
         saveUninitialized: false,
         cookie: {
-            maxAge: SESSION_MAX_AGE
+            maxAge: SESSION_MAX_AGE,
+            secure: isProdEnv()
         },
         name: SESSION_NAME,
         store: new RedisStore({ client: RedisClient, ttl: SESSION_MAX_AGE })
@@ -64,10 +65,9 @@ async function bootstrap()
     {
         // Enable secure cookie from first proxy (something like Nginx preferably)
         app.set('trust proxy', 1);
-        session.cookie.secure = true;
 
         // Configure for prod
-        const viewPath = path.join(__dirname, 'views');
+        const viewPath = path.join(__dirname, '..', '..', 'dist');
         app.use(express.static(viewPath));
 
         app.get('/', (req, res) => { res.sendFile(viewPath + 'index.html'); });

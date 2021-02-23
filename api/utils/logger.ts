@@ -2,7 +2,7 @@ import winston, { createLogger, format, transports } from 'winston';
 const colorizer = winston.format.colorize();
 
 const env = process.env.NODE_ENV;
-const logRoot = `${__dirname}/../../logs/`;
+const logRoot = `${__dirname}/../logs/`;
 const logFile = `logs_${new Date().toISOString().replace(":", "_").replace(":", "_")}.log`
 
 /** A logger for console or log file, based on environment */
