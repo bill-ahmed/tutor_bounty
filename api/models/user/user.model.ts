@@ -31,6 +31,7 @@ class UserClass {
     profileImageURL: string
 
     public validPassword(pass: string): boolean {
+        if (this.authProvider !== '') return false;
         return isEqual(pass, this.password);
     }
 }
