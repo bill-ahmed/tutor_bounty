@@ -56,7 +56,7 @@ ApplicationRouter.post('/signup', bodyParser.json(), async (req, res) => {
     Logger.debug(JSON.stringify(req.body));
 
     // Validate user input
-    await check('email', 'Email is not valid!').isEmail().normalizeEmail().run(req);
+    await check('email', 'Email is not valid!').isEmail().normalizeEmail({"gmail_remove_dots": false}).run(req);
     await check('password', `Password must be at least ${MIN_PASSWORD_LENGTH} characters long.`).isLength({ min: MIN_PASSWORD_LENGTH }).run(req);
     await check('confirmPassword', 'Password do not match!').equals(req.body.password).run(req);
 
