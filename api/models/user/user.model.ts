@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
 import { prop, plugin, index, getModelForClass, Ref } from '@typegoose/typegoose';
 import { isEqual } from '../../utils/crypto';
