@@ -21,6 +21,6 @@ export default async function init() {
         });   
     } catch (error) {
         Logger.error('Failed to connect to mongodb, check stdout.');
-        console.error(error.stack);
+        Logger.error(error.stack);
     }
 }

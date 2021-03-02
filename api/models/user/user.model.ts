@@ -3,7 +3,7 @@ import { prop, plugin, index, getModelForClass, Ref } from '@typegoose/typegoose
 import { isEqual } from '../../utils/crypto';
 
 @index({ email: 1 }, { unique: true })
-@index({ authId: 1}, { unique: true })
+@index({ authId: 1}, { sparse: true })
 @plugin(uniqueValidator)
 class UserClass {
 

@@ -47,7 +47,8 @@ async function bootstrap()
         saveUninitialized: false,
         cookie: {
             maxAge: SESSION_MAX_AGE,
-            secure: isProdEnv()
+            secure: isProdEnv(),
+            httpOnly: isProdEnv()
         },
         name: SESSION_NAME,
         store: new RedisStore({ client: RedisClient, ttl: SESSION_MAX_AGE })

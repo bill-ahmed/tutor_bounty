@@ -1,0 +1,37 @@
+version: "3.8" # https://docs.docker.com/compose/compose-file/
+services:
+  app:
+    container_name: tutor_bounty_node_prod
+    restart: unless-stopped
+    build: ./
+    links:
+      - mongo
+      - redis
+    depends_on:
+      - mongo
+      - redis
+    ports: 
+      - "8085:8085"
+  mongo:
+    container_name: tutor_bounty_mongodb_prod
+    image: mongo:4.2
+    restart: unless-stopped
+    environment: 
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=$CLOCKWORK_MONGO_PASSWORD
+    volumes:
+      - mongodata:/data/db
+    ports:
+      - "27017:27017"
+
+  redis:
+    container_name: tutor_bounty_redis_prod
+    restart: unless-stopped
+    build:
+      context: ./
+      dockerfile: Dockerfile-redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  mongodata:
