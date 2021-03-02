@@ -13,5 +13,9 @@ module.exports = {
                 changeOrigin: true
             }
         }
-    }
+    },
+
+    transpileDependencies: [
+      'vuetify'
+    ]
 }

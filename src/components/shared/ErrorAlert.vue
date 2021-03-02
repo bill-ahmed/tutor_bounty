@@ -1,0 +1,32 @@
+<template>
+  <v-row justify="center">
+    <v-spacer/>
+    <v-col>
+      <v-alert v-for="err in errors" :key="(err.msg || err.message)" dismissible type="error" border="left" min-width="350px" max-width="700px">
+        {{ err.msg || err.message }}
+      </v-alert>
+    </v-col>
+    <v-spacer/>
+  </v-row>
+</template>
+
+<script>
+export default {
+  name: 'ErrorAlert',
+  
+  props: {
+    errors: {
+      type: Array,
+      required: true
+    }
+  },
+
+  data() {
+    return {}
+  }
+}
+</script>
+
+<style>
+
+</style>

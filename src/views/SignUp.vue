@@ -1,78 +1,87 @@
 <template>
-  <div class="columns">
-    <div class="column"></div>
-    <div class="column tile is-3 is-ancestoris-vertical box">
-        <div class="column">
-          <div class="has-text-centered">
-            <p class="title"> Sign Up </p>
-            <p class="subtitle"> Create an account by filling out below. </p>
-          </div>
-          <br/>
+  <v-container>
+    <ErrorAlert :errors="errors"></ErrorAlert>
 
-          <b-button expanded rounded type="is-outlined" @click="googleLogin()">Sign Up with Google</b-button>
+    <v-row justify="center" style="margin-bottom: 10px;">
+      <v-col style="min-width: 350px; text-align: center;" cols="4" class="signup-container elevation-10">
+        <h1> Sign Up </h1>
+        <v-card-subtitle> Create an account by filling out below. </v-card-subtitle>
+        <br/>
+        
+        <SignInWithGoogle bodyText="Sign Up With Google"></SignInWithGoogle>
 
-          <hr/>
-          
-          <b-field label="Name">
-            <b-input type="text" v-model="name"></b-input>
-          </b-field>
+        <v-row style="margin-top: 15px" justify="center">
+          <v-col cols="9">
+            <form>
+              <v-text-field outlined dense v-model="name" label="Name" required></v-text-field>
+              <v-text-field outlined dense v-model="email" label="Email" required></v-text-field>
 
-          <b-field label="Email">
-            <b-input type="email" v-model="email"></b-input>
-          </b-field>
+              <v-text-field outlined dense v-model="password" type="password" label="Password" required></v-text-field>
+              <v-text-field outlined dense v-model="confirmPassword" type="password" label="Password" required></v-text-field>
+            </form>
+          </v-col>
+        </v-row>
 
-          <b-field label="Password">
-            <b-input type="password" v-model="password"></b-input>
-          </b-field>
-          
-          <b-field label="Confirm Password">
-            <b-input type="password" v-model="confirmPassword"></b-input>
-          </b-field>
+        <v-btn :ripple="false" v-on:click="signup()" :loading="loading">Sign Up</v-btn>
 
-          <b-button expanded type="is-success is-outlined" v-on:click="signup()" :loading="loading">Sign Up</b-button>
-        </div>
-    </div>
-    <div class="column"></div>
-  </div>
+        <v-card-subtitle style="margin-top: 20px;"> <i> Already have an account? </i> <v-btn small dense text to="/signin"> Sign in </v-btn> </v-card-subtitle>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import { SignInWithGoogle } from '@/utils/auth';
+import SignInWithGoogle from '@/components/auth/SignInWithGoogle';
+import ErrorAlert from '@/components/shared/ErrorAlert';
 
 export default {
-    data() {
-        return {
-            email: '',
-            password: '',
-            confirmPassword: '',
-            name: '',
-            loading: false
-        }
-    },
-    methods: {
-      async signup() {
-        this.loading = true;
-
-        try {
-          await this.axios.post('/signup', { 
-            email: this.email, 
-            password: this.password, 
-            confirmPassword: this.confirmPassword,
-            name: this.name
-          });
-        } catch (error) {
-          // TODO: Error handling
-        } finally {
-          this.loading = false; 
-        }
-      },
-      googleLogin() {
-        SignInWithGoogle();
+  data() {
+      return {
+          email: '',
+          password: '',
+          confirmPassword: '',
+          name: '',
+          loading: false,
+          errors: []
       }
+  },
+  methods: {
+    async signup() {
+      this.loading = true;
+      this.errors = [];
+
+      try {
+        await this.axios.post('/signup', { 
+          email: this.email, 
+          password: this.password, 
+          confirmPassword: this.confirmPassword,
+          name: this.name
+        });
+
+        this.$router.push('/');
+
+      } catch (error) {
+        this.handleErrors(error.response.data);
+
+      } finally {
+        this.loading = false; 
+      }
+    },
+
+    handleErrors(errors)
+    {
+      this.errors = errors;
     }
+  },
+  components: {
+    SignInWithGoogle,
+    ErrorAlert
+  }
 }
 </script>
 
 <style>
-
+.signup-container {
+  border-top: solid 6px var(--v-accent-darken1);
+}
 </style>

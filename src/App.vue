@@ -1,39 +1,31 @@
 <template>
-  <div id="app" class="container is-fluid">
-    <div class="level navbar">
-      <div class="level-left">
-        <div class="level-item">
-          <p class="title"> Tutor Bounty </p>
-        </div>
-      </div>
+  <v-app id="app">
+    <v-app-bar dark app flat>
+      <v-toolbar-title>
+        Tutor Bounty
+      </v-toolbar-title>
 
-      <div class="level-right">
-        <div class="level-item">
-          <b-button tag="router-link" to="/"> Home </b-button>
-        </div>
+      <v-spacer/>
 
-        <div v-if="!$currentUser" class="level-item">
-          <b-button tag="router-link" type="is-info is-outlined" to="/signin"> Login </b-button>
-        </div>
+      <v-btn outlined text to="/"> Home </v-btn>
+      <v-btn outlined text v-if="!$currentUser" to="/signin"> Login </v-btn>
 
-        <div v-if="!$currentUser" class="level-item">
-          <b-button tag="router-link" type="is-success is-outlined" to="/signup"> Sign Up </b-button>
-        </div>
+      <v-btn outlined text v-if="!$currentUser" to="/signup"> Sign Up </v-btn>
 
-        <div v-if="$currentUser" class="level-item">
-          <b-button type="is-warning" v-on:click="logout()">Logout</b-button>
-        </div>
+      <v-btn outlined text v-if="$currentUser" v-on:click="logout()">Logout</v-btn>
 
-        <!-- <b-button v-on:click="pingServer()">ping server</b-button>
-        <b-button v-on:click="test()">test</b-button> -->
-      </div>
-    </div>
-    <router-view/>
+        <!-- <v-btn v-on:click="pingServer()">ping server</v-btn>
+        <v-btn v-on:click="test()">test</v-btn> -->
+    </v-app-bar>
 
-    <div class="footer">
+    <v-content>
+      <router-view/>
+    </v-content>
+
+    <v-footer dark>
       Tutor Bounty © 2021
-    </div>
-  </div>
+    </v-footer>
+  </v-app>
 </template>
 
 <script>

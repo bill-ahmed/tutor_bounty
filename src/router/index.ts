@@ -64,11 +64,11 @@ const router = new VueRouter({
  * 
  */
 router.beforeEach(async (to, from, next) => {
-  var user;
+  let user;
 
   // Update currentUser
   try {
-    let result = await axios.get('/currentUser');
+    const result = await axios.get('/currentUser');
     user = result.data;
 
     Vue.prototype.$currentUser = user || null;

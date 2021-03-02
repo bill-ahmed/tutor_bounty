@@ -26,7 +26,7 @@ ApplicationRouter.post('/login', bodyParser.json(), async (req, res, next) => {
     const errors = validationResult(req);
     if(!errors.isEmpty())
     {
-        return res.sendStatus(400);
+        return res.status(400).json(errors.array());
     }
 
     // Kick em out if already logged in!
@@ -71,7 +71,11 @@ ApplicationRouter.post('/signup', bodyParser.json(), async (req, res) => {
         
         // If they already exist, error!
         if(user)
-            return res.status(400).json([{ msg: 'A user with that email already exists!' }]);
+        {
+          Logger.debug(`User with email ${req.body.email} already exists!`);
+          return res.status(400).json([{ msg: 'A user with that email already exists!' }]);
+        }
+            
         
         user = await User.create({
             email: req.body.email,
@@ -80,7 +84,12 @@ ApplicationRouter.post('/signup', bodyParser.json(), async (req, res) => {
 
         try {
             await user.save();
-            return res.sendStatus(200);
+
+            req.login(user, (err) => {
+              if(err) { Logger.error(err); return res.sendStatus(500); }
+
+              return res.sendStatus(200);
+            })
         } catch (error) {
             Logger.error('Failed to save new user.')
             Logger.error(error.stack);
