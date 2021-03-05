@@ -8,6 +8,11 @@
       </div>
 
       <div class="level-right">
+
+        <div class="level-item">
+            <b-button tag="router-link" type="is-outlined is-dark" to="/profile">Profile</b-button>
+        </div>
+
         <div class="level-item">
           <b-button tag="router-link" to="/"> Home </b-button>
         </div>

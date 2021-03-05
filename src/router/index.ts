@@ -46,6 +46,11 @@ const routes: Array<RouteConfig> = [
     component: () => import('../views/SignIn.vue')
   },
   {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('../views/Profile.vue')
+  },
+  {
     path: '*',
     component: NotFound
   }
