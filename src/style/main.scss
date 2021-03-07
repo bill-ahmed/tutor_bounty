@@ -5,3 +5,14 @@
 .v-btn {
   margin: 5px;
 }
+
+hr {
+  height: 0;
+  
+  border-top: 2px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 0;
+  border-right: 0;
+  border-left: 0;
+
+  margin: 10px 0;
+}

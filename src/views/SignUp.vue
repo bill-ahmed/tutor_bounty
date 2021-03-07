@@ -14,10 +14,15 @@
           <v-col cols="9">
             <form>
               <v-text-field outlined dense v-model="name" label="Name" required></v-text-field>
-              <v-text-field outlined dense v-model="email" label="Email" required></v-text-field>
+              <v-text-field outlined dense v-model="username" label="Username*" required></v-text-field>
 
-              <v-text-field outlined dense v-model="password" type="password" label="Password" required></v-text-field>
-              <v-text-field outlined dense v-model="confirmPassword" type="password" label="Password" required></v-text-field>
+              <hr/>
+              <br/>
+
+              <v-text-field outlined dense v-model="email" label="Email*" required></v-text-field>
+
+              <v-text-field outlined dense v-model="password" type="password" label="Password*" required></v-text-field>
+              <v-text-field outlined dense v-model="confirmPassword" type="password" label="Password*" required></v-text-field>
             </form>
           </v-col>
         </v-row>
@@ -41,6 +46,7 @@ export default {
           password: '',
           confirmPassword: '',
           name: '',
+          username: '',
           loading: false,
           errors: []
       }
@@ -55,7 +61,8 @@ export default {
           email: this.email, 
           password: this.password, 
           confirmPassword: this.confirmPassword,
-          name: this.name
+          name: this.name,
+          username: this.username
         });
 
         this.$router.push('/');

@@ -5,7 +5,7 @@ import Logger from "./utils/logger";
 import User from "./models/user/user.model";
 
 import UserRouter from "./routes/user.route";
-import { MIN_PASSWORD_LENGTH, SESSION_NAME } from "./utils/constants";
+import { MAX_NAME_LENGTH, MAX_USERNAME_LENGTH, MIN_PASSWORD_LENGTH, MIN_USERNAME_LENGTH, SESSION_NAME, USERNAME_REGEX } from "./utils/constants";
 import { hashAndSalt } from "./utils/crypto";
 import { applicationRoot, isProdEnv } from "./utils/utils";
 
@@ -55,10 +55,35 @@ ApplicationRouter.post('/login', bodyParser.json(), async (req, res, next) => {
 ApplicationRouter.post('/signup', bodyParser.json(), async (req, res) => {
     Logger.debug(JSON.stringify(req.body));
 
+    await check('name', `Name can be at most ${MAX_NAME_LENGTH} characters!`)
+          .isString()
+          .isLength({ max: MAX_NAME_LENGTH })
+          .run(req);
+
     // Validate user input
-    await check('email', 'Email is not valid!').isEmail().normalizeEmail({"gmail_remove_dots": false, "gmail_remove_subaddress": false, "outlookdotcom_remove_subaddress": false}).run(req);
-    await check('password', `Password must be at least ${MIN_PASSWORD_LENGTH} characters long.`).isLength({ min: MIN_PASSWORD_LENGTH }).run(req);
-    await check('confirmPassword', 'Password do not match!').equals(req.body.password).run(req);
+    await check('username', 'Username is not valid! May only contain alphanumeric characters or underscores.')
+          .isString()
+          .trim()
+          .isLength({ min: MIN_USERNAME_LENGTH, max: MAX_USERNAME_LENGTH })
+          .matches(USERNAME_REGEX)
+          .toLowerCase()
+          .run(req);
+
+    await check('email', 'Email is not valid!')
+          .isString()
+          .isLength({ min: 1 })
+          .trim()
+          .normalizeEmail({"gmail_remove_dots": false, "gmail_remove_subaddress": false, "outlookdotcom_remove_subaddress": false})
+          .isEmail()
+          .run(req);
+
+    await check('password', `Password must be at least ${MIN_PASSWORD_LENGTH} characters long.`)
+          .isLength({ min: MIN_PASSWORD_LENGTH })
+          .run(req);
+
+    await check('confirmPassword', 'Password do not match!')
+          .equals(req.body.password)
+          .run(req);
 
     const errors = validationResult(req);
     if(!errors.isEmpty())
@@ -75,11 +100,20 @@ ApplicationRouter.post('/signup', bodyParser.json(), async (req, res) => {
           Logger.debug(`User with email ${req.body.email} already exists!`);
           return res.status(400).json([{ msg: 'A user with that email already exists!' }]);
         }
+
+        let user_username = await User.findOne({ username: req.body.username });
+
+        if(user_username)
+        {
+          Logger.debug(`User with username ${req.body.username} already exists!`);
+          return res.status(400).json([{ msg: 'A user with that username exists!' }]);
+        }
             
-        
         user = await User.create({
             email: req.body.email,
             password: hashAndSalt(req.body.password),
+            name: req.body.name || '',
+            username: req.body.username
         });
 
         try {
