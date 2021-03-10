@@ -12,6 +12,9 @@
 
       <v-btn outlined text v-if="!$currentUser" to="/signup"> Sign Up </v-btn>
 
+      <v-btn icon v-if="$currentUser" to="/new">
+        <v-icon small> fa fa-plus </v-icon>
+      </v-btn>
       <v-btn outlined text v-if="$currentUser" v-on:click="logout()">Logout</v-btn>
 
         <!-- <v-btn v-on:click="pingServer()">ping server</v-btn>

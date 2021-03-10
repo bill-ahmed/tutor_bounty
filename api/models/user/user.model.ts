@@ -6,7 +6,7 @@ import { isEqual } from '../../utils/crypto';
 @index({ username: 1 }, { sparse: true })
 @index({ authId: 1}, { sparse: true })
 @plugin(uniqueValidator)
-class UserClass {
+export class UserClass {
 
     @prop({ })
     password!: string

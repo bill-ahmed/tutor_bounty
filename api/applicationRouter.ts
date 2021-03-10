@@ -8,6 +8,8 @@ import UserRouter from "./routes/user.route";
 import { MAX_NAME_LENGTH, MAX_USERNAME_LENGTH, MIN_PASSWORD_LENGTH, MIN_USERNAME_LENGTH, SESSION_NAME, USERNAME_REGEX } from "./utils/constants";
 import { hashAndSalt } from "./utils/crypto";
 import { applicationRoot, isProdEnv } from "./utils/utils";
+import UserPostingRouter from "./routes/user_posting.route";
+import { RequireAuthentication } from "./middleware/authentication.middleware";
 
 const bodyParser = require('body-parser');
 
@@ -26,7 +28,7 @@ ApplicationRouter.post('/login', bodyParser.json(), async (req, res, next) => {
     const errors = validationResult(req);
     if(!errors.isEmpty())
     {
-        return res.status(400).json(errors.array());
+        return res.status(400).json(errors.array({ onlyFirstError: true }));
     }
 
     // Kick em out if already logged in!
@@ -88,7 +90,7 @@ ApplicationRouter.post('/signup', bodyParser.json(), async (req, res) => {
     const errors = validationResult(req);
     if(!errors.isEmpty())
     {
-        return res.status(400).json(errors.array());
+        return res.status(400).json(errors.array({ onlyFirstError: true }));
     }
     else
     {
@@ -162,8 +164,15 @@ ApplicationRouter.use('/currentUser', (req, res) => {
   return res.json(req.user);
 });
 
-// Map controllers
-ApplicationRouter.use('/users', UserRouter);
+/** 
+ * Map URL to appropriate router
+ * 
+ * ALL PROTECTED ROUTES MUST USE "RequireAuthentication"!
+ * 
+ * */
+ApplicationRouter.use('/users', RequireAuthentication, UserRouter);
+ApplicationRouter.use('/userPostings', RequireAuthentication, UserPostingRouter);
+
 
 // All other routes are dead ends
 ApplicationRouter.use('*', (req, res) => { res.sendStatus(404); });

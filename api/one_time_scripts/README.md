@@ -1,0 +1,2 @@
+## One-time Scripts
+Paste any scripts here that need to be run in prod, e.g. creating/dropping indexes, updating existing documents in a certain way, etc. All scripts will be run using `ts-node` (or just `node` if it's a pure JS script).
