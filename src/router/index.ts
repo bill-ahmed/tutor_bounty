@@ -54,6 +54,14 @@ const routes: Array<RouteConfig> = [
     component: () => import('../views/NewPosting.vue')
   },
   {
+    path: '/postings/:id',
+    name: 'View Posting',
+    meta: {
+      auth: true        /** Protected route! Only authenticated users may enter. */ 
+    },
+    component: () => import('../views/ViewPosting.vue')
+  },
+  {
     path: '*',
     component: NotFound
   }
