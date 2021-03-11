@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "start": "cross-env NODE_ENV=development ts-node-dev --respawn index.ts",
-    "build": "rm -rf build && tsc --project ./ && cp .env build/",
+    "build": "rm -rf build && tsc --project ./ && cp .env build/api",
     "buildProd": "rm -rf build && tsc --project ./",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -68,7 +68,7 @@ async function bootstrap()
         app.set('trust proxy', 1);
 
         // Configure for prod
-        const viewPath = path.join(__dirname, '..', '..', 'dist');
+        const viewPath = path.join(__dirname, 'views');
         app.use(express.static(viewPath));
 
         app.get('/', (req, res) => { res.sendFile(viewPath + 'index.html'); });

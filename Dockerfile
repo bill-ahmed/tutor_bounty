@@ -25,9 +25,9 @@ RUN npm ci --silent
 RUN npm run build
 
 # Copy views to server
-RUN cp -r /usr/app/dist /usr/app/api/build/views
+RUN cp -r /usr/app/dist /usr/app/api/build/api/views
 
-WORKDIR /usr/app/api/build/
+WORKDIR /usr/app/api/build/api
 
 # Environment variables
 ENV HOST=0.0.0.0
