@@ -2,11 +2,15 @@ import uniqueValidator from 'mongoose-unique-validator';
 import { prop, plugin, index, getModelForClass, Ref } from '@typegoose/typegoose';
 import { UserClass } from '../user/user.model';
 
-class UserPostingClass {
+export class UserPostingClass {
 
   /** UserPosting belongs to a single User */
   @prop({ required: true, ref: () => UserClass })
   user: Ref<UserClass>;
+
+  /** When a tutor accepts this posting. */
+  @prop({ ref: () => UserClass })
+  acceptedBy?: Ref<UserClass>;
 
   @prop({ required: true })
   title: string;

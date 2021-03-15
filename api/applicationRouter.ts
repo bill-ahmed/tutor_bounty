@@ -10,6 +10,7 @@ import { hashAndSalt } from "./utils/crypto";
 import { applicationRoot, isProdEnv } from "./utils/utils";
 import UserPostingRouter from "./routes/user_posting.route";
 import { RequireAuthentication } from "./middleware/authentication.middleware";
+import MeetingRouter from "./routes/user_meeting";
 
 const bodyParser = require('body-parser');
 
@@ -172,6 +173,7 @@ ApplicationRouter.use('/currentUser', (req, res) => {
  * */
 ApplicationRouter.use('/users', RequireAuthentication, UserRouter);
 ApplicationRouter.use('/userPostings', RequireAuthentication, UserPostingRouter);
+ApplicationRouter.use('/meetings', RequireAuthentication, MeetingRouter);
 
 
 // All other routes are dead ends
