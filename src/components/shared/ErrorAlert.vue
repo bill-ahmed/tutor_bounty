@@ -26,7 +26,9 @@ export default {
   },
 
   data() {
-    return {}
+    return {
+      errs: Array.isArray(this.errors) ? this.errors : [{ msg: 'Unknown error!' }]
+    }
   }
 }
 </script>

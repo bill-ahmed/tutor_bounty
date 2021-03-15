@@ -46,9 +46,9 @@ async function UserMeetingAccess(req: Request, res: Response, next: NextFunction
  * 
  */
 MeetingRouter.get('/:id', UserMeetingAccess, async (req, res) => {
-  const meeting: DocumentType<UserMeetingClass> = await UserMeeting.findById(req.params.id);
+  const meeting: DocumentType<UserMeetingClass> = await UserMeeting.findById(req.params.id).populate('host', 'username').populate('tutor', 'username');
 
-  return res.send(200).json(meeting);
+  return res.status(200).json(meeting);
 });
 
 /** Get list of all participant's PeerJS IDs

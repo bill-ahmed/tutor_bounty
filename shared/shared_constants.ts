@@ -37,3 +37,5 @@ export const ALLOWED_MEETING_DURATIONS: string[] = [
   '5 hours',
   '6 hours'
 ];
+
+export const isDevelopmentEnv = process.env.NODE_ENV === 'development';

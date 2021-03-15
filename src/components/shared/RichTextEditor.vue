@@ -1,7 +1,7 @@
 <template>
 <v-container fluid id="rich_text_editor_container">
     <editor-menu-bar id="rich_text_editor_toolbar" :editor="editor" v-slot="{ commands, isActive }">
-      <v-toolbar dense flat elevation="1">
+      <v-toolbar v-if="canEdit()" dense flat elevation="1">
         <v-btn small text icon
           class="menubar__button"
           :color="getColor(isActive.bold())"
@@ -172,11 +172,12 @@ export default {
     EditorContent,
     EditorMenuBar
   },
-  props: ['value'],
+  props: ['value', 'content', 'isEditable'],
   data(){
     return {
       editor: new Editor({
-        content: '<p> Add a description... </p>',
+        editable: this.isEditable == null ? true : this.isEditable,
+        content: this.content ?? '<p> Add a description... </p>',
         onUpdate: ({ getHTML }) => {
           this.$emit('input', getHTML());
         },
@@ -211,6 +212,9 @@ export default {
   methods: {
     getColor(isActive: boolean) {
       return isActive ? 'primary' : '';
+    },
+    canEdit(): boolean {
+      return this.isEditable || this.isEditable == null;
     }
   },
   beforeDestroy() {
@@ -231,16 +235,16 @@ export default {
 }
 
 .editor__content {
-  border: solid 1px rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
+  // border: solid 1px rgba(0, 0, 0, 0.3);
+  // border-radius: 5px;
 
-  border-top: none;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+  // border-top: none;
+  // border-top-left-radius: 0;
+  // border-top-right-radius: 0;
 
   margin-top: 1px;
 
-  padding: 30px 10px 10px 10px;
+  padding: 10px;
 
   min-height: 300px;
   max-height: 60vh;

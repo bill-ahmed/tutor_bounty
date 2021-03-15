@@ -9,6 +9,7 @@ import {
   MAX_USER_POSTING_TITLE_LENGTH, 
   MIN_USER_POSTING_MONETARY_VALUE
 } from '../../shared/shared_constants';
+import UserMeeting from "../models/user_meeting/user_meeting.model";
 
 import UserPosting from "../models/user_posting/user_posting.model";
 import Logger from "../utils/logger";
@@ -71,13 +72,60 @@ UserPostingRouter.post('/new', bodyParser.json(), async (req: Request, res: Resp
   }
 });
 
+/** Get detailed info about a posting
+ * 
+ * @route /api/userPostings/:id
+ */
 UserPostingRouter.get('/:id', bodyParser.json(), async (req: Request, res: Response) => {
   try {
     let uid = req.params['id'];
     let userPost = await UserPosting.findById(uid);
+    
+    if(userPost == null)
+    {
+      return res.sendStatus(404);
+    }
+
     return res.json(userPost);
+
   } catch (err) {
-    return res.status(500);
+    Logger.error('Failed to get user posting details.');
+    Logger.error(err.stack);
+    return res.sendStatus(404);
+  }
+});
+
+/** Accept a user posting
+ * 
+ * @route /api/userPostings/:id/accept
+ */
+UserPostingRouter.post('/:id/accept', async (req: Request, res: Response) => {
+  try {
+    let uid = req.params['id'];
+    let userPost = await UserPosting.findById(uid);
+
+    if(userPost == null)
+      return res.sendStatus(404);
+
+    // User cannot accept their own posting!
+    if((req.user as any).id.toString() === userPost.user.toString())
+      return res.status(400).json([{ msg: 'Cannot accept your own posting!' }]);
+    
+    // If posting has already been accepted, error!
+    if(await UserMeeting.findOne({ user_posting: userPost }))
+      return res.status(400).json([{ msg: 'This posting as already been accepted!' }]);
+    
+    // Setup a new meeting with this user
+    let newMeeting = await UserMeeting.create({ host: userPost.user, tutor: req.user, user_posting: userPost });
+    await newMeeting.save();
+
+    return res.sendStatus(200);
+
+  } catch (error) {
+    Logger.error('Failed to accept user posting.')
+    Logger.error(error.stack);
+
+    return res.status(500).json([{ msg: 'Something went wrong!' }]);
   }
 });
 

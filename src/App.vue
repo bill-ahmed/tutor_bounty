@@ -22,7 +22,7 @@
     </v-app-bar>
 
     <v-content>
-      <router-view/>
+      <router-view :key="$route.fullPath"/>
     </v-content>
 
     <v-footer dark>

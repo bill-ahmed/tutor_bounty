@@ -62,6 +62,14 @@ const routes: Array<RouteConfig> = [
     component: () => import('../views/ViewPosting.vue')
   },
   {
+    path: '/meetings/:id',
+    name: 'Meeting',
+    meta: {
+      auth: true
+    },
+    component: () => import('../views/Meeting.vue')
+  },
+  {
     path: '*',
     component: NotFound
   }
