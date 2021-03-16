@@ -9,7 +9,7 @@ interface UserPostingMock {
   value: number
   title: string,
   description: string
-  subject: string
+  category: string
   author: string
 }
 
@@ -21,7 +21,7 @@ export const userPostings: UserPostingMock[] = [
     value: GetRandomInt(0, 50),
     title: 'Help me plz',
     description: 'i mean it, help meeeeee',
-    subject: 'Quantum Entangled Blockchain NLP AI',
+    category: 'Quantum Entangled Blockchain NLP AI',
     author: 'Yiming'
     
   },  {
@@ -31,7 +31,7 @@ export const userPostings: UserPostingMock[] = [
     value: GetRandomInt(0, 50),
     title: 'HELP 2 Title',
     description: 'HELP 2',
-    subject: 'Subject 2',
+    category: 'Subject 2',
     author: 'Bilal'
   },  {
     uid: 'cc273fe9d442850fa18c31c88c823e07',
@@ -40,7 +40,7 @@ export const userPostings: UserPostingMock[] = [
     value: GetRandomInt(0, 50),
     title: 'HELP 3 Title',
     description: 'HELP 3',
-    subject: 'aaaaaaaaaaaa',
+    category: 'aaaaaaaaaaaa',
     author: 'Raiyan'
   },  {
     uid: 'ff6626c69507a6f511cc398998905670',
@@ -49,7 +49,7 @@ export const userPostings: UserPostingMock[] = [
     value: GetRandomInt(0, 50),
     title: 'HELP 3 Title',
     description: 'HELP 3',
-    subject: 'bbbbbbbbbbb',
+    category: 'bbbbbbbbbbb',
     author: 'Eric'
   },  {
     uid: 'ce099d7e208dc921e259b48aadef36c1',
@@ -58,7 +58,7 @@ export const userPostings: UserPostingMock[] = [
     value: GetRandomInt(0, 50),
     title: 'HELP 4 Title',
     description: 'HELP 4',
-    subject: 'cccccccccccccc',
+    category: 'cccccccccccccc',
     author: 'Thierry'
   },  {
     uid: '4fb319211b2e85cace04e8936100f024',
@@ -67,7 +67,7 @@ export const userPostings: UserPostingMock[] = [
     value: GetRandomInt(0, 50),
     title: 'HELP 5 Title',
     description: 'HELP 5',
-    subject: 'ddddddddddd',
+    category: 'ddddddddddd',
     author: 'Vassos'
   },  {
     uid: '66bd00e43ff8b932c14140472c4b8cc6',
@@ -76,7 +76,7 @@ export const userPostings: UserPostingMock[] = [
     value: GetRandomInt(0, 50),
     title: 'HELP 5 Title '.repeat(100),
     description: 'HELP 5 '.repeat(1000),
-    subject: 'ddddddddddd',
+    category: 'ddddddddddd',
     author: 'P A N C E R'
   },
 ];
