@@ -16,9 +16,120 @@
 
     <!-- Search Results -->
     <v-row>
-      <v-row justify="end" style="margin-bottom: 25px;">
-        <v-col cols="10">
-          <v-card v-for="posting in postings" :key="posting.uid" elevation="6" outlined style="margin-top: 15px;">
+      <v-row justify="center" style="margin-bottom: 25px;">
+        <v-col cols="3">
+          <v-card
+            class="mx-auto"
+            max-width="400"
+            elevation="3"
+            outline
+          >
+            <v-list-item two-line>
+              <v-list-item-content>
+                <v-list-item-title class="headline">
+                  Filters
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <!-- Price Filter -->
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon>fas fa-dollar-sign</v-icon>
+              </v-list-item-icon>
+              <v-text-field style="width: 30px; margin-left: -30px; margin-right: 10px;" v-model="priceStart"></v-text-field>
+              to
+              <v-text-field style="width: 30px; margin-left: 10px; margin-right: 50%;" v-model="priceEnd"></v-text-field>
+            </v-list-item>
+
+            <!-- Date Range -->
+            <v-list-item>
+              <v-menu v-model="dateStartMenu" ref="dateStartMenuRef" :close-on-content-click="false" :return-value.sync="dateStart" offset-y min-width="auto">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field required
+                    v-model="dateStart"
+                    label="Start"
+                    prepend-icon="fa fa-calendar"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+
+                <v-date-picker v-model="dateStart">
+                  <v-btn
+                    text
+                    color="primary"
+                    @click="dateStartMenu = false"
+                  >
+                    Cancel
+                  </v-btn>
+
+                  <v-btn
+                    text
+                    color="primary"
+                    @click="$refs.dateStartMenuRef.save(dateStart)"
+                  >
+                    Save
+                  </v-btn>
+                </v-date-picker>
+              </v-menu>
+              <p style="margin-left: 10px; margin-right: 10px; margin-top: 15px;">to</p>
+              <v-menu v-model="dateEndMenu" ref="dateEndMenuRef" :close-on-content-click="false" :return-value.sync="dateEnd" offset-y min-width="auto">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field required
+                    v-model="dateEnd"
+                    label="End"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+
+                <v-date-picker v-model="dateEnd">
+                  <v-btn
+                    text
+                    color="primary"
+                    @click="dateEndMenu = false"
+                  >
+                    Cancel
+                  </v-btn>
+
+                  <v-btn
+                    text
+                    color="primary"
+                    @click="$refs.dateEndMenuRef.save(dateEnd)"
+                  >
+                    Save
+                  </v-btn>
+                </v-date-picker>
+              </v-menu>
+            </v-list-item>
+
+            <!-- Duration Filter -->
+            <v-list-item>
+              <v-select prepend-icon="fa fa-stopwatch" v-model="duration" label="Duration" :items="ALLOWED_MEETING_DURATIONS" required> </v-select>
+            </v-list-item>
+
+            <!-- Duration Filter -->
+            <v-list-item>
+              <v-select prepend-icon="fa fa-graduation-cap" v-model="category" label="Category" :items="ALLOWED_USER_POSTING_CATEGORIES" dense></v-select>
+            </v-list-item>
+
+            <v-divider></v-divider>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text>
+                Apply
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+
+        <!-- Search Result Cards -->
+        <v-col cols="8">
+          <v-card v-for="posting in postings" :key="posting.uid" elevation="6" outlined style="margin-bottom: 15px;">
             <v-list-item three-line>
               <!-- Left Side of the Card -->
               <v-list-item-content>
@@ -29,7 +140,7 @@
                     color="blue"
                     text-color="white"
                   >
-                    {{ posting.subject }}
+                    {{ posting.category }}
                   </v-chip>
                   <v-chip
                     class="ma-2"
@@ -69,7 +180,7 @@
 
 <script>
 import {userPostings} from '@/utils/mock_data'
-import { SORT_OPTIONS } from '../../shared/shared_constants';
+import { ALLOWED_MEETING_DURATIONS, ALLOWED_USER_POSTING_CATEGORIES, SORT_OPTIONS } from '../../shared/shared_constants';
 
 export default {
   name: 'PostingsPage',
@@ -78,12 +189,17 @@ export default {
       search: '',
       sortBy: 'Recent',
       postings: [],
-      price: -1,
+      priceStart: "",
+      priceEnd: "",
       dateStart: '',
+      dateStartMenu: false,
       dateEnd: '',
-      subject: '',
+      dateEndMenu: false,
+      category: '',
       duration: -1,
 
+      ALLOWED_MEETING_DURATIONS,
+      ALLOWED_USER_POSTING_CATEGORIES,
       SORT_OPTIONS,
     }
   },
