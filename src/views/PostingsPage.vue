@@ -14,9 +14,10 @@
       </v-row>
     </v-row>
 
-    <!-- Search Results -->
+
     <v-row>
       <v-row justify="center" style="margin-bottom: 25px;">
+        <!-- Filters -->
         <v-col cols="3">
           <v-card
             class="mx-auto"
@@ -144,7 +145,7 @@
                   </v-chip>
                   <v-chip
                     class="ma-2"
-                    color="green"
+                    :color="getCreditColour(posting.value)"
                     text-color="white"
                   >
                     CR {{ posting.value }}
@@ -226,6 +227,15 @@ export default {
         return title;
       } else {
         return title.substring(0, 50) + '...';
+      }
+    },
+    getCreditColour(value) {
+      if (value <= 10) {
+        return "green";
+      } else if (value <= 25) {
+        return "orange";
+      } else {
+        return "red";
       }
     }
   },
