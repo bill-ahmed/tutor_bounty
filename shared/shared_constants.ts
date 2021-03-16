@@ -37,3 +37,11 @@ export const ALLOWED_MEETING_DURATIONS: string[] = [
   '5 hours',
   '6 hours'
 ];
+
+/** Possible sort options. */
+export const SORT_OPTIONS: string[] = [
+  'Recent',
+  'Oldest First',
+  'Price: Low to High',
+  'Price: High to Low'
+];

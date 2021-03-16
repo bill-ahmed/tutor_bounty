@@ -81,4 +81,13 @@ UserPostingRouter.get('/:id', bodyParser.json(), async (req: Request, res: Respo
   }
 });
 
+UserPostingRouter.get('/', bodyParser.json(), async (req: Request, res: Response) => {
+  try {
+    let userPostings = await UserPosting.find({});
+    return res.json(userPostings);
+  } catch (err) {
+    return res.status(500);
+  }
+});
+
 export default UserPostingRouter;
