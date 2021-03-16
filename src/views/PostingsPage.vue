@@ -198,6 +198,8 @@ export default {
       dateEndMenu: false,
       category: '',
       duration: -1,
+      results: 0,
+      bottom: false,
 
       ALLOWED_MEETING_DURATIONS,
       ALLOWED_USER_POSTING_CATEGORIES,
@@ -237,14 +239,42 @@ export default {
       } else {
         return "red";
       }
+    },
+    bottomVisible() {
+      // Check if the user is at the bottom of the results.
+      const scrollY = window.scrollY
+      const visible = document.documentElement.clientHeight
+      const pageHeight = document.documentElement.scrollHeight
+      const bottomOfPage = visible + scrollY >= pageHeight
+      return bottomOfPage || pageHeight < visible
+    },
+    getMorePostings() {
+      // Load 10 more postings.
+      // Append to results every time more results are loaded.
+      console.log("Loading More Postings...");
+      // let newPostings = await this.axios.get('/userPostings/'); // Add page=results to url params.
+      let newPostings = userPostings;
+      for (const i in newPostings) {
+        this.postings.push(newPostings[i]);
+      }
+      this.results++;
     }
+  },
+  watch: {
+    bottom(bottom) {
+      if (bottom) {
+        // If the user gets to the bottom.
+        this.getMorePostings();
+      }
+    }
+  },
+  created() {
+    window.addEventListener('scroll', () => {
+      this.bottom = this.bottomVisible()
+    })
   },
   beforeMount() {
     this.getPostings();
   }
 }
 </script>
-
-<style scoped>
-
-</style>
