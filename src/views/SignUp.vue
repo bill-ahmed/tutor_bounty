@@ -65,7 +65,7 @@ export default {
           username: this.username
         });
 
-        this.$router.push('/');
+        this.$router.push('/dashboard');
 
       } catch (error) {
         this.handleErrors(error.response.data);

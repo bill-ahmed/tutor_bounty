@@ -70,6 +70,14 @@ const routes: Array<RouteConfig> = [
     component: () => import('../views/Meeting.vue')
   },
   {
+    path: '/dashboard',
+    name: 'Dashboard',
+    meta: {
+      auth: true
+    },
+    component: () => import('../views/Dashboard.vue')
+  },
+  {
     path: '*',
     component: NotFound
   }

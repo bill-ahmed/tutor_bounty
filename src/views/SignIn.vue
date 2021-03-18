@@ -47,7 +47,7 @@ export default {
 
       try {
         await this.axios.post('/login', { email: this.email, password: this.password });
-        this.$router.push('/');
+        this.$router.push('/dashboard');
 
       } catch (error) {
         let errors = error.response.data;

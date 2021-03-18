@@ -39,6 +39,21 @@ async function UserMeetingAccess(req: Request, res: Response, next: NextFunction
   }
 }
 
+/** Get list of meetings that user is a participant in (either host or tutor)
+ * 
+ * @route /api/meetings/myMeetings
+ */
+MeetingRouter.get('/myMeetings', async (req, res) => {
+  let userId = (req.user as any)._id.toString();
+
+  // Get list of meetings where user is a host OR tutor
+  let hostedMeetings: DocumentType<UserMeetingClass[]> = await UserMeeting.find({ host: userId }).lean().populate('user_posting').populate('tutor', 'username').populate('host', 'username');
+  let tutorMeetings: DocumentType<UserMeetingClass[]> = await UserMeeting.find({ tutor: userId }).lean().populate('user_posting').populate('tutor', 'username').populate('host', 'username');
+  
+  return res.status(200).json({ isHost: hostedMeetings, isTutor: tutorMeetings });
+});
+
+
 /** Get details about a meeeting.
  * If user is not host/tutor, 404 is returned.
  * 

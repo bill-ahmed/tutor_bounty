@@ -148,7 +148,7 @@ ApplicationRouter.get('/auth/google/callback', passport.authenticate('google', {
   Logger.debug('Callback triggered from Google sign in!');
   
 
-  return res.redirect(applicationRoot());
+  return res.redirect(applicationRoot() + 'dashboard');
 });
 
 /** Logout current user
