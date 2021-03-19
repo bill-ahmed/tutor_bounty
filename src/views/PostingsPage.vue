@@ -242,7 +242,7 @@ export default {
         // Strip out the p tag.
         let div = document.createElement("div");
         div.innerHTML = postings[i].description;
-        postings[i] = div.innerText;
+        postings[i].description = div.innerText;
         this.postings.push(postings[i]);
       }
       this.results++;
@@ -291,7 +291,7 @@ export default {
         // Strip out the p tag.
         let div = document.createElement("div");
         div.innerHTML = postings[i].description;
-        postings[i] = div.innerText;
+        postings[i].description = div.innerText;
         this.postings.push(postings[i]);
       }
       this.results++;
@@ -313,7 +313,7 @@ export default {
         // Strip out the p tag.
         let div = document.createElement("div");
         div.innerHTML = postings[i].description;
-        postings[i] = div.innerText;
+        postings[i].description = div.innerText;
         this.postings.push(postings[i]);
       }
       this.results++;
@@ -333,7 +333,7 @@ export default {
         // Strip out the p tag.
         let div = document.createElement("div");
         div.innerHTML = postings[i].description;
-        postings[i] = div.innerText;
+        postings[i].description = div.innerText;
         this.postings.push(postings[i]);
       }
       this.results++;
