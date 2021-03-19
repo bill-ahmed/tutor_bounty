@@ -355,12 +355,7 @@ export default {
     },
     checkIfFiltered() {
       this.filteredResults = false;
-      if (this.dateStart) this.filteredResults = true;
-      if (this.dateEnd) this.filteredResults = true;
-      if (this.priceStart) this.filteredResults = true;
-      if (this.priceEnd) this.filteredResults = true;
-      if (this.duration) this.filteredResults = true;
-      if (this.category) this.filteredResults = true;
+      if (this.dateStart || this.dateEnd || this.priceStart || this.priceEnd || this.duration || this.category) this.filteredResults = true;
     },
     clearFilters() {
       this.dateStart = "";

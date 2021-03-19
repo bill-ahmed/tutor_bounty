@@ -129,7 +129,7 @@ UserPostingRouter.post('/:id/accept', async (req: Request, res: Response) => {
   }
 });
 
-UserPostingRouter.get('/', bodyParser.json(), async (req: Request, res: Response) => {
+UserPostingRouter.get('/', async (req: Request, res: Response) => {
   // Create the query for the user posts.
   let query = {};
 
