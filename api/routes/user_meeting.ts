@@ -47,8 +47,8 @@ MeetingRouter.get('/myMeetings', async (req, res) => {
   let userId = (req.user as any)._id.toString();
 
   // Get list of meetings where user is a host OR tutor
-  let hostedMeetings: DocumentType<UserMeetingClass[]> = await UserMeeting.find({ host: userId }).lean().populate('user_posting').populate('tutor', 'username').populate('host', 'username');
-  let tutorMeetings: DocumentType<UserMeetingClass[]> = await UserMeeting.find({ tutor: userId }).lean().populate('user_posting').populate('tutor', 'username').populate('host', 'username');
+  let hostedMeetings = await UserMeeting.find({ host: userId }).lean().populate('user_posting').populate('tutor', 'username').populate('host', 'username');
+  let tutorMeetings = await UserMeeting.find({ tutor: userId }).lean().populate('user_posting').populate('tutor', 'username').populate('host', 'username');
   
   return res.status(200).json({ isHost: hostedMeetings, isTutor: tutorMeetings });
 });
