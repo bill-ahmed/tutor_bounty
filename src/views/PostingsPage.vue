@@ -9,7 +9,7 @@
           <v-text-field outlined dense single-line v-model="search" v-on:keyup.enter="searchPosts" type="text" label="Search..." append-icon="fa fa-search"></v-text-field>
         </v-col>
         <v-col cols="2">
-          <v-select v-model="sortBy" style="margin-top: -1%;" label="Sort By" :items="SORT_OPTIONS"> </v-select>
+          <v-select v-model="sortBy" style="margin-top: -1%;" label="Sort By" :items="SORT_OPTIONS" v-on:change="changeSortOrder"> </v-select>
         </v-col>
       </v-row>
     </v-row>
@@ -229,8 +229,9 @@ export default {
   },
   methods: {
     async getPostings() {
+      this.results = 0;
       this.postings = [];
-      let params = {page: this.results};
+      let params = {page: this.results, sort: this.sortBy};
       // The query from the backend API to get all postings.
       let res = await this.axios.get('/userPostings/', {params});
       let postings = res.data;
@@ -241,7 +242,6 @@ export default {
         this.postings.push(postings[i]);
       }
       this.results++;
-      console.log(this.postings);
     },
     getShortDescription(description) {
       if (description.length <= 800) {
@@ -277,7 +277,6 @@ export default {
     async getMorePostings() {
       // Load 10 more postings.
       // Append to results every time more results are loaded.
-      console.log("Loading More Postings...");
       let params = this.getFilters();
       let res = await this.axios.get('/userPostings/', {params});
       let postings = res.data;
@@ -288,12 +287,11 @@ export default {
     },
     async searchPosts() {
       // Search the posts and return the search results.
-      console.log("Searching Posts...");
       this.postings = [];
       this.results = 0;
       // Reset the filters upon a new search.
       this.clearFilters();
-      let params = {page: this.results, search: this.search};
+      let params = {page: this.results, search: this.search, sort: this.sortBy};
       // The query from the backend API to get the searched postings.
       let res = await this.axios.get('/userPostings/', {params});
       let postings = res.data;
@@ -304,15 +302,12 @@ export default {
         this.postings.push(postings[i]);
       }
       this.results++;
-      console.log(this.postings);
     },
     async filterPosts() {
-      console.log("Filtering Posts...");
       this.postings = [];
       this.results = 0;
       // Filter the search results according to the filters.
       let params = this.getFilters();
-      console.log(params);
       // The query from the backend API to get the searched and filtered postings.
       let res = await this.axios.get('/userPostings/', {params});
       let postings = res.data;
@@ -324,10 +319,12 @@ export default {
       }
       this.results++;
       this.checkIfFiltered();
-      console.log(this.postings);
+    },
+    changeSortOrder() {
+      this.getPostings();
     },
     getFilters() {
-      let params = {page: this.results};
+      let params = {page: this.results, sort: this.sortBy};
       if (this.search) params.search = this.search;
       if (this.dateStart) params.dateStart = this.dateStart;
       if (this.dateEnd) params.dateEnd = this.dateEnd;
