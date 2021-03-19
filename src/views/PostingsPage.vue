@@ -6,7 +6,7 @@
     <v-row>
       <v-row justify="center" style="margin-bottom: 25px;">
         <v-col cols="9">
-          <v-text-field outlined dense single-line v-model="search" type="text" label="Search..." append-icon="fa fa-search"></v-text-field>
+          <v-text-field outlined dense single-line v-model="search" v-on:keyup.enter="searchPosts" type="text" label="Search..." append-icon="fa fa-search"></v-text-field>
         </v-col>
         <v-col cols="2">
           <v-select v-model="sortBy" style="margin-top: -1%;" label="Sort By" :items="SORT_OPTIONS"> </v-select>
@@ -258,6 +258,21 @@ export default {
         this.postings.push(newPostings[i]);
       }
       this.results++;
+    },
+    searchPosts() {
+      // Search the posts and return the search results.
+      console.log("Searching Posts...");
+      this.postings = [];
+      // The query from the backend API to get all postings.
+      // let postings = await this.axios.get('/userPostings/', {search: this.search});
+      let postings = userPostings;
+      for (const i in postings) {
+        this.postings.push(postings[i]);
+      }
+      console.log(this.postings);
+    },
+    filterPosts() {
+      // Filter the search results according to the filters.
     }
   },
   watch: {
