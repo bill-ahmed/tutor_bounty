@@ -228,9 +228,10 @@ export default {
   methods: {
     async getPostings() {
       this.postings = [];
+      let params = {page: this.results};
       // The query from the backend API to get all postings.
-      // let postings = await this.axios.get('/userPostings/', {page: this.results});
-      let postings = userPostings;
+      let postings = await this.axios.get('/userPostings/', {params}).data;
+      // let postings = userPostings;
       for (const i in postings) {
         this.postings.push(postings[i]);
       }
@@ -272,7 +273,8 @@ export default {
       // Load 10 more postings.
       // Append to results every time more results are loaded.
       console.log("Loading More Postings...");
-      // let newPostings = await this.axios.get('/userPostings/', {page: this.results}); // Add page=results to url params.
+      let params = {page: this.results};
+      // let newPostings = await this.axios.get('/userPostings/', { params }); // Add page=results to url params.
       let newPostings = userPostings;
       for (const i in newPostings) {
         this.postings.push(newPostings[i]);
@@ -286,8 +288,9 @@ export default {
       this.results = 0;
       // Reset the filters upon a new search.
       this.clearFilters();
+      let params = {page: this.results, search: this.search};
       // The query from the backend API to get the searched postings.
-      // let postings = await this.axios.get('/userPostings/', {page: this.results, search: this.search});
+      // let postings = await this.axios.get('/userPostings/', { params });
       let postings = userPostings;
       for (const i in postings) {
         this.postings.push(postings[i]);
@@ -310,7 +313,7 @@ export default {
       if (this.category) params.category = this.category;
       console.log(params);
       // The query from the backend API to get the searched and filtered postings.
-      // let postings = await this.axios.get('/userPostings/', params);
+      // let postings = await this.axios.get('/userPostings/', { params });
       let postings = userPostings;
       for (const i in postings) {
         this.postings.push(postings[i]);
