@@ -149,7 +149,7 @@
 
         <!-- Search Result Cards -->
         <v-col cols="8">
-          <v-card v-for="posting in postings" :key="posting.uid" elevation="6" outlined style="margin-bottom: 15px;">
+          <v-card v-for="posting in postings" :key="posting._id" elevation="6" outlined style="margin-bottom: 15px;">
             <v-list-item three-line>
               <!-- Left Side of the Card -->
               <v-list-item-content>
@@ -187,6 +187,7 @@
                 outlined
                 rounded
                 text
+                :to="'/postings/' + posting._id"
               >
                 View More
               </v-btn>
@@ -200,7 +201,6 @@
 </template>
 
 <script>
-import {userPostings} from '@/utils/mock_data'
 import { ALLOWED_MEETING_DURATIONS, ALLOWED_USER_POSTING_CATEGORIES, SORT_OPTIONS } from '../../shared/shared_constants';
 
 export default {
