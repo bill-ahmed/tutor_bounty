@@ -129,4 +129,52 @@ UserPostingRouter.post('/:id/accept', async (req: Request, res: Response) => {
   }
 });
 
+UserPostingRouter.get('/', async (req: Request, res: Response) => {
+  // Create the query for the user posts.
+  let query = {};
+
+  // Get the sort direction.
+  let sortBy = {};
+  switch (req.query.sort) {
+    case "Recent":
+      sortBy["updatedAt"] = -1;
+      break;
+    
+    case "Oldest First":
+      sortBy["createdAt"] = 1;
+      break;
+    
+    case "Price: Low to High":
+      sortBy["value"] = 1;
+      break;
+    
+    case "Price: High to Low":
+      sortBy["value"] = -1;
+      break;
+  
+  }
+  // Check for search string.
+  if ("search" in req.query) query["title"] = {"$regex": req.query.search, "$options": "i"};
+  // Check for price min and max.
+  let priceFilter = {};
+  if ("priceStart" in req.query) priceFilter["$gte"] = Number(req.query.priceStart);
+  if ("priceEnd" in req.query) priceFilter["$lte"] = Number(req.query.priceEnd);
+  if ("priceStart" in req.query || "priceEnd" in req.query) query["value"] = priceFilter;
+  // Check for date min and max.
+  let dateFilter = {};
+  if ("dateStart" in req.query) dateFilter["$gte"] = new Date(String(req.query.dateStart)).toISOString();
+  if ("dateEnd" in req.query) dateFilter["$lte"] = new Date(String(req.query.dateEnd)).toISOString();
+  if ("dateStart" in req.query || "dateEnd" in req.query) query["startDate"] = dateFilter;
+  // Check for duration.
+  if ("duration" in req.query) query["duration"] = req.query.duration;
+  // Check for category.
+  if ("category" in req.query) query["category"] = req.query.category;
+  try {
+    let userPostings = await UserPosting.find(query).limit(5).skip(5*Number(req.query.page)).sort(sortBy);
+    return res.json(userPostings);
+  } catch (err) {
+    return res.status(500);
+  }
+});
+
 export default UserPostingRouter;
