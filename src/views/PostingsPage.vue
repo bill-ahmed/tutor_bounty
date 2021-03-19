@@ -274,15 +274,15 @@ export default {
       const bottomOfPage = visible + scrollY >= pageHeight
       return bottomOfPage || pageHeight < visible
     },
-    getMorePostings() {
+    async getMorePostings() {
       // Load 10 more postings.
       // Append to results every time more results are loaded.
       console.log("Loading More Postings...");
-      let params = {page: this.results};
-      // let newPostings = await this.axios.get('/userPostings/', { params }); // Add page=results to url params.
-      let newPostings = userPostings;
-      for (const i in newPostings) {
-        this.postings.push(newPostings[i]);
+      let params = this.getFilters();
+      let res = await this.axios.get('/userPostings/', {params});
+      let postings = res.data;
+      for (const i in postings) {
+        this.postings.push(postings[i]);
       }
       this.results++;
     },
@@ -311,14 +311,7 @@ export default {
       this.postings = [];
       this.results = 0;
       // Filter the search results according to the filters.
-      let params = {page: this.results};
-      if (this.search) params.search = this.search;
-      if (this.dateStart) params.dateStart = this.dateStart;
-      if (this.dateEnd) params.dateEnd = this.dateEnd;
-      if (this.priceStart) params.priceStart = this.priceStart;
-      if (this.priceEnd) params.priceEnd = this.priceEnd;
-      if (this.duration) params.duration = this.duration;
-      if (this.category) params.category = this.category;
+      let params = this.getFilters();
       console.log(params);
       // The query from the backend API to get the searched and filtered postings.
       let res = await this.axios.get('/userPostings/', {params});
@@ -332,6 +325,17 @@ export default {
       this.results++;
       this.checkIfFiltered();
       console.log(this.postings);
+    },
+    getFilters() {
+      let params = {page: this.results};
+      if (this.search) params.search = this.search;
+      if (this.dateStart) params.dateStart = this.dateStart;
+      if (this.dateEnd) params.dateEnd = this.dateEnd;
+      if (this.priceStart) params.priceStart = this.priceStart;
+      if (this.priceEnd) params.priceEnd = this.priceEnd;
+      if (this.duration) params.duration = this.duration;
+      if (this.category) params.category = this.category;
+      return params;
     },
     checkIfFiltered() {
       this.filteredResults = false;
