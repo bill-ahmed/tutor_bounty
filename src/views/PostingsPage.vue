@@ -140,7 +140,7 @@
               <v-btn v-if="!emptyFilter" text @click="clearFilters">
                 Clear
               </v-btn>
-              <v-btn :disabled="emptyFilter || invalidDate || invalidPrice" text @click="filterPosts">
+              <v-btn :disabled="!filteredResults && ( emptyFilter || invalidDate || invalidPrice)" text @click="filterPosts">
                 Apply
               </v-btn>
             </v-card-actions>
@@ -219,6 +219,7 @@ export default {
       duration: "",
       results: 0,
       bottom: false,
+      filteredResults: false,
 
       ALLOWED_MEETING_DURATIONS,
       ALLOWED_USER_POSTING_CATEGORIES,
@@ -325,7 +326,17 @@ export default {
         this.postings.push(postings[i]);
       }
       this.results++;
+      this.checkIfFiltered();
       console.log(this.postings);
+    },
+    checkIfFiltered() {
+      this.filteredResults = false;
+      if (this.dateStart) this.filteredResults = true;
+      if (this.dateEnd) this.filteredResults = true;
+      if (this.priceStart) this.filteredResults = true;
+      if (this.priceEnd) this.filteredResults = true;
+      if (this.duration) this.filteredResults = true;
+      if (this.category) this.filteredResults = true;
     },
     clearFilters() {
       this.dateStart = "";
