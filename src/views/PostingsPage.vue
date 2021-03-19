@@ -38,9 +38,9 @@
               <v-list-item-icon>
                 <v-icon>fas fa-dollar-sign</v-icon>
               </v-list-item-icon>
-              <v-text-field style="width: 30px; margin-left: -30px; margin-right: 10px;" v-model="priceStart"></v-text-field>
+              <v-text-field style="width: 50px; margin-left: -30px; margin-right: 10px;" v-model="priceStart" type="number" min="0"></v-text-field>
               to
-              <v-text-field style="width: 30px; margin-left: 10px; margin-right: 50%;" v-model="priceEnd"></v-text-field>
+              <v-text-field style="width: 50px; margin-left: 10px; margin-right: 40%;" v-model="priceEnd" type="number" min="0"></v-text-field>
             </v-list-item>
 
             <!-- Date Range -->
@@ -121,7 +121,10 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn text>
+              <v-btn v-if="!emptyFilter" text @click="clearFilters">
+                Clear
+              </v-btn>
+              <v-btn :disabled="emptyFilter" text @click="filterPosts">
                 Apply
               </v-btn>
             </v-card-actions>
@@ -197,7 +200,7 @@ export default {
       dateEnd: '',
       dateEndMenu: false,
       category: '',
-      duration: -1,
+      duration: "",
       results: 0,
       bottom: false,
 
@@ -263,7 +266,9 @@ export default {
       // Search the posts and return the search results.
       console.log("Searching Posts...");
       this.postings = [];
-      // The query from the backend API to get all postings.
+      // Reset the filters upon a new search.
+      this.clearFilters();
+      // The query from the backend API to get the searched postings.
       // let postings = await this.axios.get('/userPostings/', {search: this.search});
       let postings = userPostings;
       for (const i in postings) {
@@ -272,7 +277,33 @@ export default {
       console.log(this.postings);
     },
     filterPosts() {
+      console.log("Filtering Posts...");
+      this.postings = [];
       // Filter the search results according to the filters.
+      let params = {};
+      if (this.search) params.search = this.search;
+      if (this.dateStart) params.dateStart = this.dateStart;
+      if (this.dateEnd) params.dateEnd = this.dateEnd;
+      if (this.priceStart) params.priceStart = this.priceStart;
+      if (this.priceEnd) params.priceEnd = this.priceEnd;
+      if (this.duration) params.duration = this.duration;
+      if (this.category) params.category = this.category;
+      console.log(params);
+      // The query from the backend API to get the searched and filtered postings.
+      // let postings = await this.axios.get('/userPostings/', params);
+      let postings = userPostings;
+      for (const i in postings) {
+        this.postings.push(postings[i]);
+      }
+      console.log(this.postings);
+    },
+    clearFilters() {
+      this.dateStart = "";
+      this.dateEnd = "";
+      this.priceStart = "";
+      this.priceEnd = "";
+      this.duration = "";
+      this.category = "";
     }
   },
   watch: {
@@ -281,6 +312,11 @@ export default {
         // If the user gets to the bottom.
         this.getMorePostings();
       }
+    }
+  },
+  computed: {
+    emptyFilter: function () {
+      return (this.dateStart + this.dateEnd + this.priceStart + this.priceEnd + this.duration + this.category) ? false : true;
     }
   },
   created() {
