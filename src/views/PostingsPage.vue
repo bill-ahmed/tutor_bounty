@@ -170,13 +170,13 @@
                     CR {{ posting.value }}
                   </v-chip>
                 </v-list-item-title>
-                <v-list-item-subtitle style="margin-bottom: 1%;">By {{ posting.author }}</v-list-item-subtitle>
+                <v-list-item-subtitle style="margin-bottom: 1%;">By {{ posting.user }}</v-list-item-subtitle>
                 <v-card-text>{{ getShortDescription(posting.description) }}</v-card-text>
               </v-list-item-content>
               <!-- Right Side of the Card -->
               <div>
                 <h3>Value: CR {{ posting.value }}</h3>
-                <h3>Date: {{ posting.start_data.getDate() }}/{{ posting.start_data.getMonth() }}/{{ posting.start_data.getFullYear() }}</h3>
+                <h3>Date: {{ posting.startDate.getDate() }}/{{ posting.startDate.getMonth() }}/{{ posting.startDate.getFullYear() }}</h3>
                 <h3>Duration: {{ posting.duration }}</h3>
               </div>
             </v-list-item>
@@ -230,9 +230,11 @@ export default {
       this.postings = [];
       let params = {page: this.results};
       // The query from the backend API to get all postings.
-      let postings = await this.axios.get('/userPostings/', {params}).data;
-      // let postings = userPostings;
+      let res = await this.axios.get('/userPostings/', {params});
+      let postings = res.data;
       for (const i in postings) {
+        // Convert the start date to a date.
+        postings[i].startDate = new Date(postings[i].startDate);
         this.postings.push(postings[i]);
       }
       this.results++;
@@ -281,7 +283,7 @@ export default {
       }
       this.results++;
     },
-    searchPosts() {
+    async searchPosts() {
       // Search the posts and return the search results.
       console.log("Searching Posts...");
       this.postings = [];
@@ -290,15 +292,17 @@ export default {
       this.clearFilters();
       let params = {page: this.results, search: this.search};
       // The query from the backend API to get the searched postings.
-      // let postings = await this.axios.get('/userPostings/', { params });
-      let postings = userPostings;
+      let res = await this.axios.get('/userPostings/', {params});
+      let postings = res.data;
       for (const i in postings) {
+        // Convert the start date to a date.
+        postings[i].startDate = new Date(postings[i].startDate);
         this.postings.push(postings[i]);
       }
       this.results++;
       console.log(this.postings);
     },
-    filterPosts() {
+    async filterPosts() {
       console.log("Filtering Posts...");
       this.postings = [];
       this.results = 0;
@@ -313,9 +317,11 @@ export default {
       if (this.category) params.category = this.category;
       console.log(params);
       // The query from the backend API to get the searched and filtered postings.
-      // let postings = await this.axios.get('/userPostings/', { params });
-      let postings = userPostings;
+      let res = await this.axios.get('/userPostings/', {params});
+      let postings = res.data;
       for (const i in postings) {
+        // Convert the start date to a date.
+        postings[i].startDate = new Date(postings[i].startDate);
         this.postings.push(postings[i]);
       }
       this.results++;
