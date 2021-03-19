@@ -8,7 +8,7 @@
       <v-spacer/>
 
       <v-btn outlined text to="/"> Home </v-btn>
-      <v-btn outlined text v-if="!$currentUser" to="/postings"> Postings </v-btn>
+      <v-btn outlined text v-if="$currentUser" to="/postings"> Postings </v-btn>
       <v-btn outlined text v-if="!$currentUser" to="/signin"> Login </v-btn>
 
       <v-btn outlined text v-if="!$currentUser" to="/signup"> Sign Up </v-btn>
