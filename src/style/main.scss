@@ -28,6 +28,26 @@ hr {
   }
 }
 
+.nrow {
+  display: flex;
+  flex-direction: row;
+}
+
+.ncol {
+  display: flex;
+  flex-direction: column;
+}
+
+.debug {
+  border: solid 3px red;
+}
+
+.subtitle {
+  font-size: 11pt;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+
 /*** CUSTOM SCROLLBAR - Taken from a personal project ***/
 ::-webkit-scrollbar {
   width: 5px;   /** Target vertical scroll-bars */

@@ -1,8 +1,10 @@
-import { prop, plugin, index, getModelForClass, Ref } from '@typegoose/typegoose';
+import { prop, plugin, index, getModelForClass, Ref, mongoose } from '@typegoose/typegoose';
 import { ModelType } from '@typegoose/typegoose/lib/types';
 import { UserClass } from '../user/user.model';
 import { UserPostingClass } from '../user_posting/user_posting.model';
 
+
+@index({ user_posting: 1 }, { unique: true })
 @plugin(require('mongoose-autopopulate') as any)
 export class UserMeetingClass {
 

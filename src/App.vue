@@ -13,6 +13,7 @@
 
       <v-btn outlined text v-if="!$currentUser" to="/signup"> Sign Up </v-btn>
 
+      <v-btn outlined text v-if="$currentUser" to="/dashboard"> Dashboard </v-btn>
       <v-btn icon v-if="$currentUser" to="/new">
         <v-icon small> fa fa-plus </v-icon>
       </v-btn>
@@ -23,7 +24,7 @@
     </v-app-bar>
 
     <v-content>
-      <router-view/>
+      <router-view :key="$route.fullPath"/>
     </v-content>
 
     <v-footer dark>

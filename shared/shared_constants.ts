@@ -38,6 +38,7 @@ export const ALLOWED_MEETING_DURATIONS: string[] = [
   '6 hours'
 ];
 
+
 /** Possible sort options. */
 export const SORT_OPTIONS: string[] = [
   'Recent',
@@ -45,3 +46,5 @@ export const SORT_OPTIONS: string[] = [
   'Price: Low to High',
   'Price: High to Low'
 ];
+
+export const isDevelopmentEnv = process.env.NODE_ENV === 'development';

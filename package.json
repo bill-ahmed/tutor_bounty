@@ -13,6 +13,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "peerjs": "^1.3.2",
     "tiptap": "^1.32.1",
     "tiptap-extensions": "^1.35.1",
     "vue": "^2.6.11",

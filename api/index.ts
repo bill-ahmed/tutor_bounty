@@ -5,6 +5,8 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 
+const { ExpressPeerServer } = require('peer');
+
 import Logger from './utils/logger';
 import ApplicationRouter from './applicationRouter';
 import init from './init';
@@ -15,6 +17,7 @@ import setupAuth from './auth/setupAuth';
 import { SESSION_MAX_AGE, SESSION_NAME } from './utils/constants';
 import RedisClient from './utils/redis';
 import { isProdEnv } from './utils/utils';
+import { RequireAuthentication } from './middleware/authentication.middleware';
 
 const app = express();
 
@@ -73,7 +76,7 @@ async function bootstrap()
 
         app.get('/', (req, res) => { res.sendFile(viewPath + 'index.html'); });
     }
-    
+
     app.use('/api', ApplicationRouter);
 
     // Let vue-router handle 404s
@@ -81,7 +84,19 @@ async function bootstrap()
     app.use((req, res) => { res.redirect('/#' + req.url); });
 
     await init();
-    app.listen(PORT, HOST, () => { Logger.info(`Server listening on: http://${HOST}:${PORT}!`) });
+    const server = app.listen(PORT, HOST, () => { Logger.info(`Server listening on: http://${HOST}:${PORT}!`) });
+
+    // Peer JS dependency
+    const peerServer = ExpressPeerServer(server, {
+      debug: !isProdEnv(),
+      proxied: true,
+    });
+    
+    app.use('/peerjs', RequireAuthentication, peerServer);
+    
+    
+    peerServer.on('connection', (client) => { console.log('client connected');});
+    peerServer.on('disconnect', (client) => { console.log('client disconnected');});
 }
 
 bootstrap();
