@@ -177,6 +177,7 @@
               <div>
                 <h3>Value: CR {{ posting.value }}</h3>
                 <h3>Date: {{ posting.startDate.getDate() }}/{{ posting.startDate.getMonth() }}/{{ posting.startDate.getFullYear() }}</h3>
+                <h3>Time: {{ posting.startTime.toLocaleTimeString() }}</h3>
                 <h3>Duration: {{ posting.duration }}</h3>
               </div>
             </v-list-item>
@@ -234,8 +235,9 @@ export default {
       let res = await this.axios.get('/userPostings/', {params});
       let postings = res.data;
       for (const i in postings) {
-        // Convert the start date to a date.
+        // Convert the start date and time to Date type.
         postings[i].startDate = new Date(postings[i].startDate);
+        postings[i].startTime = new Date(postings[i].startTime);
         this.postings.push(postings[i]);
       }
       this.results++;
@@ -296,8 +298,9 @@ export default {
       let res = await this.axios.get('/userPostings/', {params});
       let postings = res.data;
       for (const i in postings) {
-        // Convert the start date to a date.
+        // Convert the start date and time to Date type.
         postings[i].startDate = new Date(postings[i].startDate);
+        postings[i].startTime = new Date(postings[i].startTime);
         this.postings.push(postings[i]);
       }
       this.results++;
@@ -321,8 +324,9 @@ export default {
       let res = await this.axios.get('/userPostings/', {params});
       let postings = res.data;
       for (const i in postings) {
-        // Convert the start date to a date.
+        // Convert the start date and time to Date type.
         postings[i].startDate = new Date(postings[i].startDate);
+        postings[i].startTime = new Date(postings[i].startTime);
         this.postings.push(postings[i]);
       }
       this.results++;
