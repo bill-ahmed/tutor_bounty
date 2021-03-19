@@ -40,7 +40,15 @@
               </v-list-item-icon>
               <v-text-field style="width: 50px; margin-left: -30px; margin-right: 10px;" v-model="priceStart" type="number" min="0"></v-text-field>
               to
-              <v-text-field style="width: 50px; margin-left: 10px; margin-right: 40%;" v-model="priceEnd" type="number" min="0"></v-text-field>
+              <v-text-field style="width: 50px; margin-left: 10px; margin-right: 10%;" v-model="priceEnd" type="number" min="0"></v-text-field>
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-list-item-icon>
+                    <v-icon v-if="invalidPrice" v-bind="attrs" v-on="on" style="color: red;">fas fa-exclamation-triangle</v-icon>
+                  </v-list-item-icon>
+                </template>
+                <span>Max price must be greater than min price.</span>
+              </v-tooltip>
             </v-list-item>
 
             <!-- Date Range -->
@@ -105,6 +113,14 @@
                   </v-btn>
                 </v-date-picker>
               </v-menu>
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-list-item-icon>
+                    <v-icon v-if="invalidDate" v-bind="attrs" v-on="on" style="color: red;">fas fa-exclamation-triangle</v-icon>
+                  </v-list-item-icon>
+                </template>
+                <span>Start date must be before end date.</span>
+              </v-tooltip>
             </v-list-item>
 
             <!-- Duration Filter -->
@@ -124,7 +140,7 @@
               <v-btn v-if="!emptyFilter" text @click="clearFilters">
                 Clear
               </v-btn>
-              <v-btn :disabled="emptyFilter" text @click="filterPosts">
+              <v-btn :disabled="emptyFilter || invalidDate || invalidPrice" text @click="filterPosts">
                 Apply
               </v-btn>
             </v-card-actions>
@@ -317,6 +333,20 @@ export default {
   computed: {
     emptyFilter: function () {
       return (this.dateStart + this.dateEnd + this.priceStart + this.priceEnd + this.duration + this.category) ? false : true;
+    },
+    invalidPrice: function() {
+      if (this.priceStart && this.priceEnd) {
+        return (Number(this.priceStart) >= Number(this.priceEnd)) ? true : false;
+      } else {
+        return false;
+      }
+    },
+    invalidDate: function() {
+      if (this.dateStart && this.dateEnd) {
+        return (Date.parse(this.dateStart) >= Date.parse(this.dateEnd)) ? true : false;
+      } else {
+        return false;
+      }
     }
   },
   created() {
