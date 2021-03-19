@@ -239,6 +239,10 @@ export default {
         // Convert the start date and time to Date type.
         postings[i].startDate = new Date(postings[i].startDate);
         postings[i].startTime = new Date(postings[i].startTime);
+        // Strip out the p tag.
+        let div = document.createElement("div");
+        div.innerHTML = postings[i].description;
+        postings[i] = div.innerText;
         this.postings.push(postings[i]);
       }
       this.results++;
@@ -281,6 +285,13 @@ export default {
       let res = await this.axios.get('/userPostings/', {params});
       let postings = res.data;
       for (const i in postings) {
+        // Convert the start date and time to Date type.
+        postings[i].startDate = new Date(postings[i].startDate);
+        postings[i].startTime = new Date(postings[i].startTime);
+        // Strip out the p tag.
+        let div = document.createElement("div");
+        div.innerHTML = postings[i].description;
+        postings[i] = div.innerText;
         this.postings.push(postings[i]);
       }
       this.results++;
@@ -299,6 +310,10 @@ export default {
         // Convert the start date and time to Date type.
         postings[i].startDate = new Date(postings[i].startDate);
         postings[i].startTime = new Date(postings[i].startTime);
+        // Strip out the p tag.
+        let div = document.createElement("div");
+        div.innerHTML = postings[i].description;
+        postings[i] = div.innerText;
         this.postings.push(postings[i]);
       }
       this.results++;
@@ -315,6 +330,10 @@ export default {
         // Convert the start date and time to Date type.
         postings[i].startDate = new Date(postings[i].startDate);
         postings[i].startTime = new Date(postings[i].startTime);
+        // Strip out the p tag.
+        let div = document.createElement("div");
+        div.innerHTML = postings[i].description;
+        postings[i] = div.innerText;
         this.postings.push(postings[i]);
       }
       this.results++;
