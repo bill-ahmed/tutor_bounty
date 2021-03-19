@@ -89,11 +89,11 @@ UserPostingRouter.get('/', bodyParser.json(), async (req: Request, res: Response
   let sortBy = {};
   switch (req.query.sort) {
     case "Recent":
-      sortBy["updatedAt"] = 1;
+      sortBy["updatedAt"] = -1;
       break;
     
     case "Oldest First":
-      sortBy["createdAt"] = -1;
+      sortBy["createdAt"] = 1;
       break;
     
     case "Price: Low to High":
