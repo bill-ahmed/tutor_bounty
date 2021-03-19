@@ -229,11 +229,12 @@ export default {
     async getPostings() {
       this.postings = [];
       // The query from the backend API to get all postings.
-      // let postings = await this.axios.get('/userPostings/');
+      // let postings = await this.axios.get('/userPostings/', {page: this.results});
       let postings = userPostings;
       for (const i in postings) {
         this.postings.push(postings[i]);
       }
+      this.results++;
       console.log(this.postings);
     },
     getShortDescription(description) {
@@ -271,7 +272,7 @@ export default {
       // Load 10 more postings.
       // Append to results every time more results are loaded.
       console.log("Loading More Postings...");
-      // let newPostings = await this.axios.get('/userPostings/'); // Add page=results to url params.
+      // let newPostings = await this.axios.get('/userPostings/', {page: this.results}); // Add page=results to url params.
       let newPostings = userPostings;
       for (const i in newPostings) {
         this.postings.push(newPostings[i]);
@@ -282,21 +283,24 @@ export default {
       // Search the posts and return the search results.
       console.log("Searching Posts...");
       this.postings = [];
+      this.results = 0;
       // Reset the filters upon a new search.
       this.clearFilters();
       // The query from the backend API to get the searched postings.
-      // let postings = await this.axios.get('/userPostings/', {search: this.search});
+      // let postings = await this.axios.get('/userPostings/', {page: this.results, search: this.search});
       let postings = userPostings;
       for (const i in postings) {
         this.postings.push(postings[i]);
       }
+      this.results++;
       console.log(this.postings);
     },
     filterPosts() {
       console.log("Filtering Posts...");
       this.postings = [];
+      this.results = 0;
       // Filter the search results according to the filters.
-      let params = {};
+      let params = {page: this.results};
       if (this.search) params.search = this.search;
       if (this.dateStart) params.dateStart = this.dateStart;
       if (this.dateEnd) params.dateEnd = this.dateEnd;
@@ -311,6 +315,7 @@ export default {
       for (const i in postings) {
         this.postings.push(postings[i]);
       }
+      this.results++;
       console.log(this.postings);
     },
     clearFilters() {
