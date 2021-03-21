@@ -171,7 +171,7 @@ export default {
           value: parseInt(this.value)
         });
         
-        alert('Created posting!');
+        this.$router.push('/postings')
 
       } catch (error) {
         console.error('Error creating a new positng!');

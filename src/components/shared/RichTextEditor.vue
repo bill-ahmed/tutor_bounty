@@ -15,7 +15,7 @@
           :color="getColor(isActive.italic())"
           @click="commands.italic"
         >
-          <v-icon small> fa fa-plus </v-icon>
+          <v-icon small> fa fa-italic </v-icon>
         </v-btn>
 
         <v-btn small text icon
