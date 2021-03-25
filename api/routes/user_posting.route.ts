@@ -170,7 +170,7 @@ UserPostingRouter.get('/', async (req: Request, res: Response) => {
   // Check for category.
   if ("category" in req.query) query["category"] = req.query.category;
   try {
-    let userPostings = await UserPosting.find(query).limit(5).skip(5*Number(req.query.page)).sort(sortBy);
+    let userPostings = await UserPosting.find(query).limit(5).skip(5*Number(req.query.page)).sort(sortBy).populate('user', 'username');
     return res.json(userPostings);
   } catch (err) {
     return res.status(500);

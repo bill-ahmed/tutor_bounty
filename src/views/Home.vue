@@ -1,13 +1,5 @@
 <template>
   <v-container>
-    <div v-if="$currentUser">
-      <p class="subtitle"> Welcome, {{ $currentUser.name }}. </p>
-      <p> Your email: {{ $currentUser.email }} </p>
-      <p> Link to your profile picture: <u> {{ $currentUser.profileImageURL }} </u> </p>
-    </div>
-    
-    <br/>
-
     <p>Home page.</p>
   </v-container>
 </template>

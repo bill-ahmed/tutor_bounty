@@ -2,12 +2,14 @@
   <v-container fluid>
     <v-row justify="center">
       <v-col cols="6">
-        <div class="nrow">
-          <p class="display-1"> Dashboard </p>
+        <div v-if="$currentUser">
+          <p class="subtitle text-h4"> Welcome, {{ $currentUser.name || $currentUser.username }}. </p>
         </div>
+        
+        <br/>
 
         <div class="nrow">
-          <p class="text-primary"> My upcoming meetings </p>
+          <p class="text-h6"> My upcoming meetings </p>
         </div>
 
         <div v-for="meeting in meetings" :key="meeting._id">

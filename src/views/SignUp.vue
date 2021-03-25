@@ -3,7 +3,7 @@
     <ErrorAlert :errors="errors"></ErrorAlert>
 
     <v-row justify="center" style="margin-bottom: 10px;">
-      <v-col style="min-width: 350px; text-align: center;" cols="4" class="signup-container elevation-10">
+      <v-col style="min-width: 350px; text-align: center;" cols="4" class="signup-container n-elevation-1">
         <h1> Sign Up </h1>
         <v-card-subtitle> Create an account by filling out below. </v-card-subtitle>
         <br/>
@@ -13,7 +13,7 @@
         <v-row style="margin-top: 15px" justify="center">
           <v-col cols="9">
             <form>
-              <v-text-field outlined dense v-model="name" label="Name" required></v-text-field>
+              <v-text-field autofocus outlined dense v-model="name" label="Name (Optional)" required></v-text-field>
               <v-text-field outlined dense v-model="username" label="Username*" required></v-text-field>
 
               <hr/>
@@ -27,7 +27,7 @@
           </v-col>
         </v-row>
 
-        <v-btn :ripple="false" v-on:click="signup()" :loading="loading">Sign Up</v-btn>
+        <v-btn :ripple="false" v-on:click="signup()" :loading="loading" color="secondary" raised dark>Sign Up</v-btn>
 
         <v-card-subtitle style="margin-top: 20px;"> <i> Already have an account? </i> <v-btn small dense text to="/signin"> Sign in </v-btn> </v-card-subtitle>
       </v-col>
@@ -89,6 +89,6 @@ export default {
 
 <style>
 .signup-container {
-  border-top: solid 6px var(--v-accent-darken1);
+  border-top: solid 6px var(--v-secondary-base);
 }
 </style>

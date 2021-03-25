@@ -3,7 +3,7 @@
     <ErrorAlert :errors="errors"></ErrorAlert>
 
     <v-row justify="center" style="margin-bottom: 10px;">
-      <v-col style="min-width: 350px; text-align: center;" cols="4" class="signin-container elevation-10">
+      <v-col style="min-width: 350px; text-align: center;" cols="4" class="signin-container n-elevation-1">
         <h1> Login </h1>
         <v-card-subtitle> Sign in to continue. </v-card-subtitle>
         <br/>
@@ -13,8 +13,8 @@
         <v-row style="margin-top: 15px" justify="center">
           <v-col cols="9">
             <form>
-              <v-text-field outlined dense v-model="email" type="email" label="Email" required></v-text-field>
-              <v-text-field outlined dense v-model="password" type="password" label="Password" required></v-text-field>
+              <v-text-field @keydown.enter.exact="login()" autofocus outlined dense v-model="email" type="email" label="Email" required></v-text-field>
+              <v-text-field @keydown.enter.exact="login()" outlined dense v-model="password" type="password" label="Password" required></v-text-field>
             </form>
           </v-col>
         </v-row>

@@ -39,7 +39,7 @@ hr {
 }
 
 .debug {
-  border: solid 3px red;
+  border: solid 1px red;
 }
 
 .subtitle {
@@ -47,6 +47,8 @@ hr {
   color: rgba(0, 0, 0, 0.6);
 }
 
+.n-elevation-1 { box-shadow: rgba(148, 148, 148, 0.2) 0px 0px 24px; }
+.d-elevation-1 { box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.05), 0 3px 10px 0 rgba(0, 0, 0, 0.1); }
 
 /*** CUSTOM SCROLLBAR - Taken from a personal project ***/
 ::-webkit-scrollbar {

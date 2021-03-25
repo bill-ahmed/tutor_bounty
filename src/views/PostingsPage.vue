@@ -4,14 +4,16 @@
 
     <!-- Search Bar -->
     <v-row>
-      <v-row justify="center" style="margin-bottom: 25px;">
-        <v-col cols="9">
-          <v-text-field outlined dense single-line v-model="search" v-on:keyup.enter="searchPosts" type="text" label="Search..." append-icon="fa fa-search"></v-text-field>
-        </v-col>
-        <v-col cols="2">
-          <v-select v-model="sortBy" style="margin-top: -1%;" label="Sort By" :items="SORT_OPTIONS" v-on:change="changeSortOrder"> </v-select>
-        </v-col>
-      </v-row>
+      <v-col cols="12">
+        <v-row justify="center" align="center">
+          <v-col cols="9">
+            <v-text-field outlined dense single-line v-model="search" @keydown.enter.exact="searchPosts" type="text" label="Search..." append-icon="fa fa-search"></v-text-field>
+          </v-col>
+          <v-col cols="2">
+            <v-select outlined dense v-model="sortBy" label="Sort By" :items="SORT_OPTIONS" v-on:change="changeSortOrder"> </v-select>
+          </v-col>
+        </v-row>
+      </v-col>
     </v-row>
 
 
@@ -20,9 +22,8 @@
         <!-- Filters -->
         <v-col cols="3">
           <v-card
-            class="mx-auto"
+            class="mx-auto filter-section"
             max-width="400"
-            elevation="3"
             outline
           >
             <v-list-item two-line>
@@ -38,9 +39,9 @@
               <v-list-item-icon>
                 <v-icon>fas fa-dollar-sign</v-icon>
               </v-list-item-icon>
-              <v-text-field style="width: 50px; margin-left: -30px; margin-right: 10px;" v-model="priceStart" type="number" min="0"></v-text-field>
+              <v-text-field outlined dense style="width: 50px; margin-left: -30px; margin-right: 10px;" v-model="priceStart" type="number" min="0"></v-text-field>
               to
-              <v-text-field style="width: 50px; margin-left: 10px; margin-right: 10%;" v-model="priceEnd" type="number" min="0"></v-text-field>
+              <v-text-field outlined dense style="width: 50px; margin-left: 10px; margin-right: 10%;" v-model="priceEnd" type="number" min="0"></v-text-field>
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
                   <v-list-item-icon>
@@ -55,7 +56,7 @@
             <v-list-item>
               <v-menu v-model="dateStartMenu" ref="dateStartMenuRef" :close-on-content-click="false" :return-value.sync="dateStart" offset-y min-width="auto">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-text-field required
+                  <v-text-field required outlined dense
                     v-model="dateStart"
                     label="Start"
                     prepend-icon="fa fa-calendar"
@@ -83,10 +84,10 @@
                   </v-btn>
                 </v-date-picker>
               </v-menu>
-              <p style="margin-left: 10px; margin-right: 10px; margin-top: 15px;">to</p>
+              <p style="margin-left: 10px; margin-right: 10px;">to</p>
               <v-menu v-model="dateEndMenu" ref="dateEndMenuRef" :close-on-content-click="false" :return-value.sync="dateEnd" offset-y min-width="auto">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-text-field required
+                  <v-text-field required outlined dense
                     v-model="dateEnd"
                     label="End"
                     readonly
@@ -125,12 +126,12 @@
 
             <!-- Duration Filter -->
             <v-list-item>
-              <v-select prepend-icon="fa fa-stopwatch" v-model="duration" label="Duration" :items="ALLOWED_MEETING_DURATIONS" required> </v-select>
+              <v-select outlined dense prepend-icon="fa fa-stopwatch" v-model="duration" label="Duration" :items="ALLOWED_MEETING_DURATIONS" required> </v-select>
             </v-list-item>
 
             <!-- Duration Filter -->
             <v-list-item>
-              <v-select prepend-icon="fa fa-graduation-cap" v-model="category" label="Category" :items="ALLOWED_USER_POSTING_CATEGORIES" dense></v-select>
+              <v-select outlined dense prepend-icon="fa fa-graduation-cap" v-model="category" label="Category" :items="ALLOWED_USER_POSTING_CATEGORIES"></v-select>
             </v-list-item>
 
             <v-divider></v-divider>
@@ -149,7 +150,14 @@
 
         <!-- Search Result Cards -->
         <v-col cols="8">
-          <v-card v-for="posting in postings" :key="posting._id" elevation="6" outlined style="margin-bottom: 15px;">
+          <v-card v-for="posting in postings" :key="posting._id" 
+              :ripple="false" 
+              @click="goToPosting(posting._id)" 
+              @mouseenter="hoveredOver = posting._id"
+              @mouseleave="hoveredOver = ''"
+              class="posting-row search-results" 
+              style="margin-bottom: 15px;"
+            >
             <v-list-item three-line>
               <!-- Left Side of the Card -->
               <v-list-item-content>
@@ -159,6 +167,8 @@
                     class="ma-2"
                     color="blue"
                     text-color="white"
+                    label
+                    small
                   >
                     {{ posting.category }}
                   </v-chip>
@@ -166,31 +176,30 @@
                     class="ma-2"
                     :color="getCreditColour(posting.value)"
                     text-color="white"
+                    label
+                    small
                   >
                     CR {{ posting.value }}
                   </v-chip>
                 </v-list-item-title>
-                <v-list-item-subtitle style="margin-bottom: 1%;">By {{ posting.user }}</v-list-item-subtitle>
+                <v-list-item-subtitle style="margin-bottom: 1%;">By {{ posting.user.username }}</v-list-item-subtitle>
                 <v-card-text>{{ getShortDescription(posting.description) }}</v-card-text>
               </v-list-item-content>
               <!-- Right Side of the Card -->
               <div>
-                <h3>Value: CR {{ posting.value }}</h3>
-                <h3>Date: {{ posting.startDate.getDate() }}/{{ posting.startDate.getMonth() }}/{{ posting.startDate.getFullYear() }}</h3>
-                <h3>Time: {{ posting.startTime.toLocaleTimeString() }}</h3>
+                <p class="">Value: CR {{ posting.value }}</p>
+                <p>Date: {{ posting.startDate.getDate() }}/{{ posting.startDate.getMonth() }}/{{ posting.startDate.getFullYear() }}</p>
+                <p>Time: {{ posting.startTime.toLocaleTimeString() }}</p>
                 <h3>Duration: {{ posting.duration }}</h3>
               </div>
             </v-list-item>
 
             <v-card-actions>
-              <v-btn
-                outlined
-                rounded
-                text
-                :to="'/postings/' + posting._id"
-              >
-                View More
-              </v-btn>
+              <v-spacer/>
+              <p class="subtitle" :style="hoveredOver === posting._id ? '' : 'opacity: 0;'">
+                <i> Click to view more </i>
+              </p>
+              <v-spacer/>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -201,7 +210,11 @@
 </template>
 
 <script>
-import { ALLOWED_MEETING_DURATIONS, ALLOWED_USER_POSTING_CATEGORIES, SORT_OPTIONS } from '../../shared/shared_constants';
+import { ALLOWED_MEETING_DURATIONS, ALLOWED_USER_POSTING_CATEGORIES, SORT_OPTIONS } from '@/../shared/shared_constants';
+
+/* Constants */
+// Consider the bottom of page is reached when within this distance
+const BOTTOM_SCROLL_OFFSET = 200;
 
 export default {
   name: 'PostingsPage',
@@ -210,17 +223,24 @@ export default {
       search: '',
       sortBy: 'Recent',
       postings: [],
+
       priceStart: "",
       priceEnd: "",
+
       dateStart: '',
       dateStartMenu: false,
       dateEnd: '',
       dateEndMenu: false,
+
       category: '',
       duration: "",
+
       results: 0,
       bottom: false,
       filteredResults: false,
+
+      // Which posting mouse is hovered over
+      hoveredOver: '',
 
       ALLOWED_MEETING_DURATIONS,
       ALLOWED_USER_POSTING_CATEGORIES,
@@ -275,7 +295,7 @@ export default {
       const scrollY = window.scrollY
       const visible = document.documentElement.clientHeight
       const pageHeight = document.documentElement.scrollHeight
-      const bottomOfPage = visible + scrollY >= pageHeight
+      const bottomOfPage = visible + scrollY + BOTTOM_SCROLL_OFFSET >= pageHeight
       return bottomOfPage || pageHeight < visible
     },
     async getMorePostings() {
@@ -364,6 +384,9 @@ export default {
       this.priceEnd = "";
       this.duration = "";
       this.category = "";
+    },
+    goToPosting(postingId) {
+      this.$router.push('/postings/' + postingId);
     }
   },
   watch: {
@@ -403,3 +426,27 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+
+.v-card.v-sheet.posting-row, .v-card.v-sheet.filter-section {
+  border-radius: 10px;
+  box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.05), 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+}
+
+.v-card.v-sheet.filter-section {
+  border-radius: 0;
+}
+
+.search-results {
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+}
+
+p {
+  margin-bottom: 2px;
+}
+</style>

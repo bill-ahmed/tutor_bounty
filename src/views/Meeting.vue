@@ -8,7 +8,7 @@
       <v-row style="height: 100%; flex-wrap: nowrap;">
         <!-- Left actions -->
         <v-col cols="4" class="ncol rounded">
-          <div id="meeting_info_container">
+          <div id="meeting_info_container" class="n-elevation-1">
             <div class="nrow">
               <h2 class="">
                 {{userPosting.title}}
@@ -34,7 +34,7 @@
           <br/>
           
           <!-- Chat messaging window -->
-          <div class="ncol grow" id="chat_container">
+          <div class="ncol grow n-elevation-1" id="chat_container">
             <div class="nrow grow messagingWindow" id="messages">
               <div class="ngrow" v-if="messages.length === 0">
                   <p class="subtitle" style="margin-bottom: 50px;"> 
@@ -342,13 +342,14 @@ p {
 #meeting_info_container {
   padding: 10px;
   border-radius: 10px;
-  box-shadow: 0 0px 1px 0 rgba(0, 0, 0, 0.2), 0 0px 10px 0 rgba(0, 0, 0, 0.19);
+  border: solid 1px rgba(0, 0, 0, 0.06);
+  // box-shadow: 0 0px 1px 0 rgba(0, 0, 0, 0.2), 0 0px 10px 0 rgba(0, 0, 0, 0.19);
 }
 
 #chat_container {
   border-radius: 10px;
-
-  box-shadow: 0 0px 1px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border: solid 1px rgba(0, 0, 0, 0.06);
+  // box-shadow: 0 0px 1px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 #messages {

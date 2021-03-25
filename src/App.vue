@@ -1,26 +1,19 @@
 <template>
   <v-app id="app">
-    <v-app-bar dark app flat>
-      <v-toolbar-title>
+    <v-app-bar color="white" app flat>
+      <div @click="goHome()" id="app_heading_text">
         Tutor Bounty
-      </v-toolbar-title>
+      </div>
 
       <v-spacer/>
 
-      <v-btn outlined text to="/"> Home </v-btn>
-      <v-btn outlined text v-if="$currentUser" to="/postings"> Postings </v-btn>
-      <v-btn outlined text v-if="!$currentUser" to="/signin"> Login </v-btn>
+      <v-btn :ripple="false" text v-if="!$currentUser" to="/signin"> Login </v-btn>
+      <v-btn v-if="!$currentUser" to="/signup" color="secondary" elevation="1"> Sign Up </v-btn>
 
-      <v-btn outlined text v-if="!$currentUser" to="/signup"> Sign Up </v-btn>
-
-      <v-btn outlined text v-if="$currentUser" to="/dashboard"> Dashboard </v-btn>
-      <v-btn icon v-if="$currentUser" to="/new">
-        <v-icon small> fa fa-plus </v-icon>
-      </v-btn>
-      <v-btn outlined text v-if="$currentUser" v-on:click="logout()">Logout</v-btn>
-
-        <!-- <v-btn v-on:click="pingServer()">ping server</v-btn>
-        <v-btn v-on:click="test()">test</v-btn> -->
+      <v-btn :ripple="false" text v-if="$currentUser" to="/dashboard"> Dashboard </v-btn>
+      <v-btn :ripple="false" text v-if="$currentUser" to="/postings"> Postings </v-btn>
+      <Avatar v-if="$currentUser" :logout="logout"/>
+      
     </v-app-bar>
 
     <v-content>
@@ -34,26 +27,32 @@
 </template>
 
 <script>
+import Avatar from '@/components/shared/Avatar';
+
 export default {
+  components: {
+    Avatar
+  },
   data() {
     return { }
   },
   methods: {
-    async pingServer() {
-      const result = await this.axios.get('/isAlive');
-      console.log(result.data);
-    },
     async logout() {
-      const result = await this.axios.post('/logout');
+      await this.axios.post('/logout');
       this.$router.push('/signin')
     },
-    test() {
-      console.log(this.$currentUser);
+    goHome() {
+      this.$router.push('/');
     }
   }
 }
 </script>
 
 <style lang="scss">
+#app_heading_text {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 1.8rem;
 
+  cursor: pointer;
+}
 </style>

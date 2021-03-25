@@ -9,7 +9,7 @@
       </div>
       
       <div class="nrow" id="personal_stream_container">
-        <video muted autoplay :class="isReady() ? 'small_stream' : 'medium_stream'" id="personal_stream"></video>
+        <video muted autoplay :class="isReady() ? 'small_stream' : 'medium_stream'" class="n-elevation-1" id="personal_stream"></video>
         <div id="personal_stream_actions" :class="isReady() ? 'small_stream_actions' : ''">
           <!-- Enable/disable audio -->
           <v-btn dark fab color="teal" @click="toggleAudio()" :small="isReady()" :loading="loading"> 
@@ -280,7 +280,7 @@ export default {
   justify-content: center;
 
   #personal_stream {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    // box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
 
   #personal_stream.small_stream {
