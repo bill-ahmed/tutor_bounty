@@ -79,7 +79,7 @@ UserPostingRouter.post('/new', bodyParser.json(), async (req: Request, res: Resp
 UserPostingRouter.get('/:id', bodyParser.json(), async (req: Request, res: Response) => {
   try {
     let uid = req.params['id'];
-    let userPost = await UserPosting.findById(uid);
+    let userPost = await UserPosting.findById(uid).populate('user', 'username');
     
     if(userPost == null)
     {

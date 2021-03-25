@@ -1,7 +1,7 @@
 <template>
 <v-container fluid id="rich_text_editor_container">
     <editor-menu-bar id="rich_text_editor_toolbar" :editor="editor" v-slot="{ commands, isActive }">
-      <v-toolbar v-if="canEdit()" dense flat elevation="1">
+      <v-toolbar v-if="canEdit()" dense flat>
         <v-btn small text icon
           class="menubar__button"
           :color="getColor(isActive.bold())"
@@ -231,6 +231,9 @@ export default {
     .v-btn {
       margin: 2px;
     }
+
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
   }
 }
 

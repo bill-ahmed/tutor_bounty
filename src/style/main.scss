@@ -50,6 +50,10 @@ hr {
 .n-elevation-1 { box-shadow: rgba(148, 148, 148, 0.2) 0px 0px 24px; }
 .d-elevation-1 { box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.05), 0 3px 10px 0 rgba(0, 0, 0, 0.1); }
 
+.border-5 { border-radius: 5px; }
+.border-10 { border-radius: 10px; }
+.border-25 { border-radius: 25px; }
+
 /*** CUSTOM SCROLLBAR - Taken from a personal project ***/
 ::-webkit-scrollbar {
   width: 5px;   /** Target vertical scroll-bars */

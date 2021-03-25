@@ -4,7 +4,7 @@
     <v-row>
       <v-row justify="center" style="margin-bottom: 25px;">
         <v-col cols="7">
-          <h1 style="font-weight: 400;"> Create a new posting </h1>
+          <div class="text-h4 subtitle" style="font-weight: 400;"> Create a new posting </div>
         </v-col>
         <v-col cols="4"></v-col>
       </v-row>
@@ -16,7 +16,7 @@
           <v-text-field autofocus outlined dense v-model="title" type="text" label="Title*" required></v-text-field>
         </v-row>
 
-        <v-row>
+        <v-row class="text-editor-container">
           <!-- <v-textarea outlined v-model="description" label="Description*" required rows="15"></v-textarea> -->
           <RichTextEditor v-model="description"></RichTextEditor>
         </v-row>
@@ -26,7 +26,7 @@
         </v-row>
       </v-col>
 
-      <v-col cols="4" class="elevation-3">
+      <v-col cols="4" class="d-elevation-1 border-10">
         <v-row>
           <!-- Choose start date  -->
           <v-col>
@@ -90,19 +90,23 @@
               ></v-time-picker>
             </v-menu>
           </v-col>
+        </v-row>
 
-          <!-- Choose duration -->
-          <v-col cols="3">
+        <!-- Choose duration -->
+        <v-row justify="center">
+          <v-col>
             <v-select prepend-icon="fa fa-stopwatch" v-model="duration" label="Duration*" :items="ALLOWED_MEETING_DURATIONS" required> </v-select>
           </v-col>
         </v-row>
 
+        <!-- Choose category -->
         <v-row justify="center">
           <v-col>
             <v-select prepend-icon="fa fa-graduation-cap" v-model="category" label="Choose category*" :items="ALLOWED_USER_POSTING_CATEGORIES" dense></v-select>
           </v-col>
         </v-row>
 
+        <!-- Choose monetary valuew -->
         <v-row>
           <v-col>
             <v-text-field prepend-icon="fa fa-dollar-sign" v-model="value" type="number" label="Monetary Value*" hint="A value of zero implies volunteer request!" required></v-text-field>
@@ -197,5 +201,10 @@ export default {
 <style scoped>
 .col {
   margin: 0 10px;
+}
+
+.text-editor-container {
+  border: solid 2px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
 }
 </style>

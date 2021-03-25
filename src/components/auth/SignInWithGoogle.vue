@@ -1,6 +1,6 @@
 <template>
-  <v-btn rounded outlined text @click="googleLogin()">
-    <v-icon left color="blue"> fab fa-google </v-icon>
+  <v-btn  block outlined rounded text @click="googleLogin()">
+    <v-icon left small color="blue"> fab fa-google </v-icon>
     {{ bodyText || 'Sign In with Google' }}
   </v-btn>
 </template>
@@ -25,6 +25,9 @@ export default Vue.extend({
 })
 </script>
 
-<style>
-
+<style scoped>
+.v-btn {
+  margin-left: 0;
+  margin-right: 0;
+}
 </style>

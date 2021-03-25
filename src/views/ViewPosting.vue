@@ -3,46 +3,83 @@
     <v-row>
       <ErrorAlert :errors="errors"></ErrorAlert>
     </v-row>
-    <div v-if="$currentUser && userPost">
-      <v-banner  class="subtitle text-h6 text-center"> Welcome, this is user post {{ urlId }}. </v-banner>      
-      <v-card
-        class="mx-auto mt-5"
-        max-width="80%"
-      >
-        <v-card-text>
-          <div>post id: {{ urlId}}</div>
-          <p class="display-1 text--primary">
-              {{userPost['title']}}
-          </p>
-          <div class="text--primary">
-            <RichTextEditor :content="userPost['description']" :isEditable="false"></RichTextEditor>
-          </div>
-        </v-card-text>
-      
-        <v-card-actions>
-          <v-spacer/>
+    <v-row v-if="userPost" justify="center" style="margin: 40px 0;">
+      <!-- The posting itself -->
+      <v-col id="posting-view" cols="7">
+        <div class="text-h4 subtitle" style="margin-bottom: 10px;"> {{userPost['title']}} </div>
 
-          <v-btn
-            text
-            @click="cancel()"
-            :disabled="loading"
-          >
-            Cancel
-          </v-btn>
+        <div class="nrow" style="align-items: center">
+          <v-chip label :color="getCreditColour(userPost.value)" text-color="white">
+            CR {{ userPost.value }}
+          </v-chip>
 
+          <v-chip label color="blue" text-color="white">
+            {{ userPost.category }}
+          </v-chip>
+        </div>
+        <br/>
+
+        <RichTextEditor :content="userPost['description']" :isEditable="false"></RichTextEditor>
+      </v-col>
+
+      <!-- Additional info about the posting -->
+      <v-col id="posting-more-info" class="n-elevation-1" cols="3">
+        <div class="text-h6 subtitle" style="margin-bottom: 10px;"> About </div>
+
+        <div class="nrow">
+          <v-chip label dark class="large-label">
+            <v-avatar left>
+              <v-icon> fa fa-user </v-icon>
+            </v-avatar>
+            {{userPost.user.username}} 
+          </v-chip>
+        </div>
+
+        <div class="nrow">
+          <v-chip label outlined color="black" class="large-label">
+            <v-avatar left>
+              <v-icon> fa fa-calendar </v-icon>
+            </v-avatar>
+            {{userPost.startDate}} 
+          </v-chip>
+        </div>
+
+        <div class="nrow">
+          <v-chip label outlined color="black" class="large-label">
+            <v-avatar left>
+              <v-icon> fa fa-stopwatch </v-icon>
+            </v-avatar>
+            {{userPost.duration}} 
+          </v-chip>
+        </div>
+        
+        <v-spacer/>
+
+        <div class="nrow justify-center">
           <v-btn
             color="primary"
-            outlined
+            depressed
+            block
             @click="accept()"
             :loading="loading"
           >
             Accept
           </v-btn>
+        </div>
 
-          <v-spacer/>
-        </v-card-actions>
-      </v-card>
-    </div>
+        <div class="nrow justify-center" style="margin-bottom: 50px;">
+          <v-btn
+            block
+            text
+            outlined
+            @click="cancel()"
+            :disabled="loading"
+          >
+            Cancel
+          </v-btn>
+        </div>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -77,6 +114,9 @@ export default {
         },
 
         async accept() {
+          if(!confirm('Are you sure you want to accept?'))
+            return;
+
           this.loading = true;
           this.errors = [];
 
@@ -88,7 +128,16 @@ export default {
           }
 
           this.loading = false;
-        }
+        },
+        getCreditColour(value) {
+          if (value <= 10) {
+            return "green";
+          } else if (value <= 25) {
+            return "orange";
+          } else {
+            return "red";
+          }
+        },
     },
     mounted() {
         this.viewPosting();
@@ -96,3 +145,40 @@ export default {
 
 }
 </script>
+
+<style lang="scss" scoped>
+#posting-view {
+  border-radius: 10px;
+  border: solid 2px rgba(0, 0, 0, 0.06);
+}
+
+#posting-more-info {
+  border-radius: 10px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.grow {
+  flex-grow: 1;
+}
+
+.v-chip {
+  margin: 0 5px;
+}
+
+.v-chip.large-label {
+  flex-grow: 1;
+  margin: 5px 0;
+  height: 42px;
+}
+
+.row {
+  padding: 0 10px;
+}
+
+.col {
+  margin: 0 15px;
+}
+</style>

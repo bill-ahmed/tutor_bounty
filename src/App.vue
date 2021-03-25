@@ -1,11 +1,12 @@
 <template>
   <v-app id="app">
     <v-app-bar color="white" app flat>
+      <v-spacer style="max-width: 100px;"/>
       <div @click="goHome()" id="app_heading_text">
         Tutor Bounty
       </div>
 
-      <v-spacer/>
+      <v-spacer class="mx-auto"/>
 
       <v-btn :ripple="false" text v-if="!$currentUser" to="/signin"> Login </v-btn>
       <v-btn v-if="!$currentUser" to="/signup" color="secondary" elevation="1"> Sign Up </v-btn>
@@ -13,6 +14,8 @@
       <v-btn :ripple="false" text v-if="$currentUser" to="/dashboard"> Dashboard </v-btn>
       <v-btn :ripple="false" text v-if="$currentUser" to="/postings"> Postings </v-btn>
       <Avatar v-if="$currentUser" :logout="logout"/>
+
+      <v-spacer style="max-width: 0px;"/>
       
     </v-app-bar>
 

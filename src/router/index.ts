@@ -7,6 +7,11 @@ import NotFound from '../views/404.vue'
 
 Vue.use(VueRouter)
 
+/* Constants */
+
+// The default document title
+const HOME_TITLE = 'Tutor Bounty';
+
 /** Define routes.
  * @description All routes are open to public!! To restrict to only logged-in users,
  *              add a 'meta' property of: { auth: true }. Use an auth value of 'public' 
@@ -24,6 +29,9 @@ const routes: Array<RouteConfig> = [
   {
     path: '/about',
     name: 'About',
+    meta: {
+      title: 'About Us'
+    },
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
@@ -33,7 +41,8 @@ const routes: Array<RouteConfig> = [
     path: '/signup',
     name: 'Sign Up',
     meta: {
-      auth: 'public'    /** Only allow user that are NOT logged-in. */
+      auth: 'public'    /** Only allow user that are NOT logged-in. */,
+      title: 'Sign Up'
     },
     component: () => import('../views/SignUp.vue'),
   },
@@ -41,7 +50,8 @@ const routes: Array<RouteConfig> = [
     path: '/signin',
     name: 'Sign In',
     meta: {
-      auth: 'public'    /** Only allow user that are NOT logged-in. */
+      auth: 'public',    /** Only allow user that are NOT logged-in. */
+      title: 'Sign In'
     },
     component: () => import('../views/SignIn.vue')
   },
@@ -49,7 +59,8 @@ const routes: Array<RouteConfig> = [
     path: '/postings',
     name: 'Postings',
     meta: {
-      auth: true        /** Protected route! Only authenticated users may enter. */ 
+      auth: true,        /** Protected route! Only authenticated users may enter. */ 
+      title: 'Postings'
     },
     component: () => import('../views/PostingsPage.vue')
   },
@@ -57,7 +68,8 @@ const routes: Array<RouteConfig> = [
     path: '/new',
     name: 'New Posting',
     meta: {
-      auth: true        /** Protected route! Only authenticated users may enter. */ 
+      auth: true,
+      title: 'Create a New Posting'
     },
     component: () => import('../views/NewPosting.vue')
   },
@@ -65,7 +77,8 @@ const routes: Array<RouteConfig> = [
     path: '/postings/:id',
     name: 'View Posting',
     meta: {
-      auth: true        /** Protected route! Only authenticated users may enter. */ 
+      auth: true,
+      title: 'View Posting'
     },
     component: () => import('../views/ViewPosting.vue')
   },
@@ -73,7 +86,8 @@ const routes: Array<RouteConfig> = [
     path: '/meetings/:id',
     name: 'Meeting',
     meta: {
-      auth: true
+      auth: true,
+      title: 'Meeting'
     },
     component: () => import('../views/Meeting.vue')
   },
@@ -81,13 +95,17 @@ const routes: Array<RouteConfig> = [
     path: '/dashboard',
     name: 'Dashboard',
     meta: {
-      auth: true
+      auth: true,
+      title: 'My Dashboard'
     },
     component: () => import('../views/Dashboard.vue')
   },
   {
     path: '*',
-    component: NotFound
+    component: NotFound,
+    meta: {
+      title: 'Not Found!'
+    }
   }
 ]
 
@@ -117,13 +135,18 @@ router.beforeEach(async (to, from, next) => {
     Vue.prototype.$currentUser = null; 
   }
 
+  document.title = to.meta.title || HOME_TITLE;
+
   // Check whether user has access to the route or not
   if(to.matched.some(r => { return r.meta.auth === 'public' }))
   {
     // This is a route that no logged in user should see
     if(user)
+    {
+      document.title = HOME_TITLE;
       return next('/');
-    
+    }
+
     return next();
   }
 
@@ -133,6 +156,7 @@ router.beforeEach(async (to, from, next) => {
     if(user)
       return next();
     
+    document.title = HOME_TITLE;
     return next('/');
   }
 

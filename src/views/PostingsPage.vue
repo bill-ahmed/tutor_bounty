@@ -39,7 +39,7 @@
               <v-list-item-icon>
                 <v-icon>fas fa-dollar-sign</v-icon>
               </v-list-item-icon>
-              <v-text-field outlined dense style="width: 50px; margin-left: -30px; margin-right: 10px;" v-model="priceStart" type="number" min="0"></v-text-field>
+              <v-text-field outlined dense style="width: 50px; margin-left: -23px; margin-right: 10px;" v-model="priceStart" type="number" min="0"></v-text-field>
               to
               <v-text-field outlined dense style="width: 50px; margin-left: 10px; margin-right: 10%;" v-model="priceEnd" type="number" min="0"></v-text-field>
               <v-tooltip top>

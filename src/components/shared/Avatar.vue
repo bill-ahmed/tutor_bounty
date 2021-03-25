@@ -2,8 +2,9 @@
   <v-menu bottom rounded offset-y min-width="200px">
     <template v-slot:activator="{ on }">
       <v-btn dark icon x-large v-on="on" :ripple="false">
-        <v-avatar rounded color="primary" size="48">
-          <span> {{ usernameInitials }} </span>
+        <v-avatar color="primary" size="48">
+          <img v-if="$currentUser.profileImageURL" :src="$currentUser.profileImageURL"/>
+          <span v-else> {{ usernameInitials }} </span>
         </v-avatar>
       </v-btn>
     </template>

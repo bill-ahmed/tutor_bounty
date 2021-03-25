@@ -8,7 +8,15 @@
         <v-card-subtitle> Create an account by filling out below. </v-card-subtitle>
         <br/>
         
-        <SignInWithGoogle bodyText="Sign Up With Google"></SignInWithGoogle>
+        <v-row justify="center">
+          <v-col cols="9">
+            <SignInWithGoogle bodyText="Sign Up With Google"></SignInWithGoogle>
+          </v-col>
+        </v-row>
+
+        <v-row justify="center">
+          <p> or </p>
+        </v-row>
 
         <v-row style="margin-top: 15px" justify="center">
           <v-col cols="9">
@@ -87,8 +95,12 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .signup-container {
   border-top: solid 6px var(--v-secondary-base);
+
+  p {
+    margin: 0;
+  }
 }
 </style>

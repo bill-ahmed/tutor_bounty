@@ -8,7 +8,15 @@
         <v-card-subtitle> Sign in to continue. </v-card-subtitle>
         <br/>
         
-        <SignInWithGoogle></SignInWithGoogle>
+        <v-row justify="center">
+          <v-col cols="9">
+            <SignInWithGoogle></SignInWithGoogle>
+          </v-col>
+        </v-row>
+
+        <v-row justify="center">
+          <p> or </p>
+        </v-row>
 
         <v-row style="margin-top: 15px" justify="center">
           <v-col cols="9">
@@ -64,8 +72,12 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .signin-container {
   border-top: solid 6px var(--v-primary-base);
+
+  p {
+    margin: 0;
+  }
 }
 </style>
