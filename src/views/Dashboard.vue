@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-row justify="center">
-      <v-col cols="6">
+      <v-col cols="5">
         <div v-if="$currentUser">
           <p class="subtitle text-h4"> Welcome, {{ $currentUser.name || $currentUser.username }}. </p>
         </div>

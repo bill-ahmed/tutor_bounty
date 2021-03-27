@@ -270,16 +270,15 @@ export default {
 
 
 #personal_stream_container {
-  position: relative;
-
-  height: 100%;
-  min-height: 125px;
-  /* max-height: 125px; */
+  position: relative; 
 
   z-index: 100;
   justify-content: center;
 
   #personal_stream {
+    height: 100%;
+    min-height: 125px;
+    max-height: 400px;
     // box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
 

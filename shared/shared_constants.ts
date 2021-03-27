@@ -16,6 +16,9 @@ export const MAX_USER_POSTING_TITLE_LENGTH: number = 200;
 /** Maximum length of user posting description. */
 export const MAX_USER_POSTING_DESCRIPTION_LENGTH: number = 5000;
 
+/** Maximum size of message a user can send in a meeting. */
+export const MAX_USER_MESSAGE_LENGTH: number = 2000;
+
 /** Possible categories a posting may have. */
 export const ALLOWED_USER_POSTING_CATEGORIES: string[] = [
   'Arts & Literature',

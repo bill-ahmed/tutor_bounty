@@ -21,7 +21,7 @@
             </div>
             
             <!-- User posting category + connection status -->
-            <div class="nrow">
+            <div class="nrow flex-wrap align-center">
               <v-chip label color="primary" small> {{userPosting.category}} </v-chip>
               <v-spacer/>
               <v-chip label :color="getConnectionColour()"> 
@@ -42,30 +42,33 @@
                   </p>
               </div>
 
+              <!-- Used to calculate if user has scrolled all the way to the top or not! -->
+              <div id="intersection_target"/>
+
               <!-- Render all messages -->
-              <div class="nrow" v-for="msg in messages" :key="msg.content + msg.timestamp">
-                <v-spacer v-if="msg.from === $currentUser.username"/>
+              <div class="nrow" v-for="msg in messages" :key="msg.content + msg.createdAt">
+                <v-spacer v-if="msg.from === $currentUser._id"/>
 
                 <!-- Only show avatar icon for other user -->
-                <v-avatar v-if="msg.from !== $currentUser.username"
+                <v-avatar v-if="msg.from !== $currentUser._id"
                   class="msg_avatar"
                   color="primary"
                   size="40"
-                >{{msg.from.substr(0, 1).toUpperCase()}}</v-avatar>
+                >{{otherUserName.substr(0, 1).toUpperCase()}}</v-avatar>
 
-                <div :class="msg.from === $currentUser.username ? 'internal_message' : 'external_message'">
-                  <v-tooltip :left="msg.from === $currentUser.username" :right="msg.from !== $currentUser.username">
+                <div :class="msg.from === $currentUser._id ? 'internal_message' : 'external_message'">
+                  <v-tooltip :left="msg.from === $currentUser._id" :right="msg.from !== $currentUser._id" style="z-index: 200;">
                     <template v-slot:activator="{ on, attrs }">
                       <p
                         v-bind="attrs"
                         v-on="on"
                       >{{msg.content}}</p>
                     </template>
-                    <span>{{new Date(msg.timestamp).toLocaleString()}}</span>
+                    <span>{{new Date(msg.createdAt).toLocaleString()}}</span>
                   </v-tooltip>
                 </div>
 
-                <v-spacer v-if="msg.from !== $currentUser.username"/>
+                <v-spacer v-if="msg.from !== $currentUser._id"/>
               </div>
             </div>
             
@@ -86,7 +89,7 @@
         <!-- Video call -->
         <v-col class="rounded">
           <div class="nrow grow" id="video_container">
-            <VideoCall v-if="!loading" :peer="peer" :isHost="isHost()" :peerId="isHost() ? meetingDetails.tutor._id : meetingDetails.host._id"> </VideoCall>
+            <VideoCall v-if="!loading" :peer="peer" :isHost="isHost()" :peerId="isHost() ? meetingDetails.tutor._id + '_' + meetingDetails._id : meetingDetails.host._id + '_' + meetingDetails._id"> </VideoCall>
           </div>
         </v-col>
       </v-row>
@@ -96,7 +99,7 @@
 
 <script>
 import Peer from 'peerjs';
-import { isDevelopmentEnv } from '@/../shared/shared_constants';
+import { isDevelopmentEnv, MAX_USER_MESSAGE_LENGTH } from '@/../shared/shared_constants';
 import VideoCall from '@/components/shared/VideoCall';
 
 export default {
@@ -121,9 +124,16 @@ export default {
       // The message to send & list of all messages
       message: '',
       messages: [],
+      messagePage: -1,
 
       // Background check if peer is connected
       refreshInterval: null,
+
+      // Username of other person
+      otherUserName: '',
+
+      // Detects when user scrolls to top of messages via IntersectionObserver
+      scrollObserver: null,
 
       loading: true,
       error: null
@@ -181,14 +191,20 @@ export default {
 
       if(this.message.trim() === '')
         return;
+      
+      if(this.message.trim().length > MAX_USER_MESSAGE_LENGTH)
+      {
+        alert(`Message is too long! Can not exceeed ${MAX_USER_MESSAGE_LENGTH} characters.`);
+        return;
+      }
 
-      if(!this.isConnected)
-        return alert('Need to connect first!');
+      let createdAt = Date.now();
+      let newMessage = { from: this.$currentUser._id, content: this.message, createdAt }
 
-      let timestamp = Date.now();
-      let newMessage = { from: this.$currentUser.username, content: this.message, timestamp }
       this.messages.push(newMessage);
       this.connection.send(newMessage);
+
+      this.axios.post(`/meetings/${this.meetingId}/sendMessage`, { message: this.message });
       this.message = '';
 
       this.scrollToBottomOfMessages();
@@ -202,7 +218,21 @@ export default {
     /** Get information about this user meeting */
     async getDetails() {
       try {
+        // Get meeting details as well as most recent messages
         let meetingDetails = await (await this.axios.get(`/meetings/${this.meetingId}`)).data
+        await this.getMoreMessages();
+        this.scrollToBottomOfMessages();
+
+        var peer = new Peer(this.$currentUser._id + '_' + meetingDetails._id, {
+          host: '/',
+          port: isDevelopmentEnv ? 8081 : 443,
+          debug: 0,
+          path: '/peerjs'
+        });
+
+        this.peer = peer;
+
+        console.log('>> My peer ID', this.$currentUser._id + '_' + meetingDetails._id);
 
         // Parse out important info
         meetingDetails.user_posting.startDate = new Date(meetingDetails.user_posting.startDate);
@@ -210,7 +240,7 @@ export default {
 
         this.meetingDetails = meetingDetails
         this.userPosting = this.meetingDetails.user_posting;
-        this.loading = false;
+        this.otherUserName = this.isHost() ? this.meetingDetails.tutor.username : this.meetingDetails.host.username;
 
         console.log('>> Is Host? ', this.isHost());
         
@@ -222,16 +252,30 @@ export default {
 
         this.connection.on('data', (data) => {
           this.handleMessageRecieved(data);
-        })
+        });
 
         this.handlePeerSetup();
         this.backgroundRefresh();
 
+        this.loading = false;
+
       } catch (error) {
         console.log('Error getting meeting details', error);
-        this.error = { type: 'unknown' }
+        this.error = { type: 'unknown' };
         this.isConnected = false;
       }
+
+      setTimeout(this.registerDOMEvents, 500);
+    },
+
+    async getMoreMessages() {
+      this.messagePage += 1;
+      let messages = await (await this.axios.get(`/meetings/${this.meetingId}/messages?page=${this.messagePage}`)).data;
+      
+      if(messages.length > 0)
+        this.messages.unshift(...messages.reverse());
+      else
+        this.messagePage -= 1;
     },
 
     /** Configure event listeners for PeerJS */
@@ -239,6 +283,7 @@ export default {
       this.peer.on('connection', (conn) => {
         let otherID = conn.peer;
         let otherExpectedID = this.isHost() ? this.meetingDetails.tutor._id : this.meetingDetails.host._id
+        otherExpectedID += '_' + this.meetingDetails._id
 
         // Make sure unexpected user can't connect!
         if(otherID !== otherExpectedID)
@@ -268,16 +313,17 @@ export default {
             this.isConnected = false
             break;
         }
-
-        // TODO: NEEDS MORE ERROR HANDLING!
-        // e.g.: ID is already taken, one or both clients are disconnected, server error, etc.
       });
     },
 
     /** Establish a connection to other peer */
     connectToPeer() {
       console.log('>> Attempting connection to peer...');
-      this.connection = this.peer.connect(this.isHost() ? this.meetingDetails.tutor._id : this.meetingDetails.host._id);
+      let hostId = this.meetingDetails.host._id + '_' + this.meetingDetails._id;
+      let tutorId = this.meetingDetails.tutor._id + '_' + this.meetingDetails._id;
+
+      console.log('connecting to', this.isHost() ? tutorId : hostId)
+      this.connection = this.peer.connect(this.isHost() ? tutorId : hostId);
     },
 
     /** Periodically check if peer is connected */
@@ -295,6 +341,25 @@ export default {
         var element = document.getElementById("messages")
         element.scrollTop = element.scrollHeight; 
       }, 50)
+    },
+
+    /* Respond to events such as scrolling messages. */
+    registerDOMEvents() {
+      console.log('registering DOM events!');
+
+      // Define boundaries for what we consider to be an intersection
+      let options = {
+        root: document.getElementById('messages'),
+        rootMargin: '100px',
+        threshold: 0.1
+      };
+
+      // Listen for intersection (async)
+      this.scrollObserver = new IntersectionObserver((entries) => {
+        this.getMoreMessages();
+      }, options);
+
+      this.scrollObserver.observe(document.getElementById('intersection_target'));
     },
 
     /** Check if still connected to peer */
@@ -366,6 +431,10 @@ p {
   .msg_avatar {
     margin-right: 5px;
     color: white;
+  }
+
+  p {
+    word-wrap: break-word;
   }
 }
 

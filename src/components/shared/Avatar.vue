@@ -64,4 +64,8 @@ export default {
 .v-divider {
   margin: 20px 0;
 }
+
+.v-menu {
+  z-index: 200;
+}
 </style>

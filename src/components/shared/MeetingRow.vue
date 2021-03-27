@@ -1,27 +1,34 @@
 <template>
   <v-container @click="goToMeeting()" :class="isHost() ? 'host_container' : 'tutor_container'" fluid>
-    <!-- Top info -->
-    <v-row>
-      <v-col>
-        <p> {{ userPosting.title }} </p>
+      <v-row>
+        <v-col>
+            <!-- Top info -->
+        <v-row>
+          <v-col>
+            <p> {{ userPosting.title }} </p>
+            
+            <div v-if="!isHost()" class="nrow">
+              <v-icon x-small style="margin-right: 7px"> fa fa-user </v-icon>
+              <p class="subtitle"> {{ meeting.host.username }} </p>
+            </div>
+          </v-col>
+        </v-row>
+
+        <!-- Bottom info -->
+        <v-row>
+          <v-col>
+            <v-chip label small color="primary"> {{ userPosting.category }} </v-chip>
+
+            <v-chip v-if="isHost()" label small color="teal" dark> Host </v-chip>
+            <v-chip v-if="!isHost()" label small color="purple" dark> Tutor </v-chip>
+          </v-col>
+        </v-row>
       </v-col>
 
-      <v-col>
-        <div class="nrow">
-          <p class="subtitle"> {{ new Date(userPosting.startDate).toLocaleString() }} </p>
-          <p class="subtitle"> • </p>
-          <p class="subtitle"> {{ userPosting.duration }} </p>
-        </div>
-      </v-col>
-    </v-row>
-
-    <!-- Bottom info -->
-    <v-row>
-      <v-col>
-        <v-chip label small color="primary"> {{ userPosting.category }} </v-chip>
-
-        <v-chip v-if="isHost()" label small color="teal" dark> Host </v-chip>
-        <v-chip v-if="!isHost()" label small color="purple" dark> Tutor </v-chip>
+      <v-col cols="3" class="text-end" align-self="center">
+        <p class="subtitle"> {{ userPosting.duration }} </p>
+        <p class="subtitle"> {{ new Date(userPosting.startDate).toLocaleString().split(', ')[0] }} </p>
+        <p class="subtitle"> {{ new Date(userPosting.startDate).toLocaleString().split(', ')[1] }} </p>
       </v-col>
     </v-row>
   </v-container>
@@ -58,18 +65,14 @@ export default {
 }
 
 .host_container {
-  border-left: solid 4px #009688;
+  border-left: solid 5px #009688;
 }
 
 .tutor_container {
-  border-left: solid 4px #9c27b0;
+  border-left: solid 5px #9c27b0;
 }
 
 .v-chip {
-  margin: 0 5px;
-}
-
-.subtitle {
   margin: 0 5px;
 }
 
