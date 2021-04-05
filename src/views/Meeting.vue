@@ -220,7 +220,7 @@ export default {
       }
 
       let createdAt = Date.now();
-      let newMessage = { from: this.$currentUser._id, content: this.message, createdAt }
+      let newMessage = { from: this.$currentUser._id, content: this.message, createdAt, type: 'meeting_ended' }
 
       this.messages.push(newMessage);
       this.connection.send(newMessage);
@@ -232,6 +232,12 @@ export default {
     },
 
     handleMessageRecieved(message) {
+      console.log(message);
+      if(message.type === 'meeting_end')
+      {
+        this.endMeeting(false, true);
+        return;
+      }
       this.messages.push(message);
       this.scrollToBottomOfMessages();
     },
@@ -358,10 +364,16 @@ export default {
       this.$router.push('/dashboard', () => { window.location.reload() })
     },
 
-    endMeeting() {
-      if(confirm('Are you sure you want to end the meeting?'))
+    endMeeting(sendTerminatingMessage = true, skipConfirm = false) {
+      
+
+      if(skipConfirm || confirm('Are you sure you want to end the meeting?'))
       {
+        if(sendTerminatingMessage)
+          this.connection.send({ type: 'meeting_end' });
+
         this.ratingOpen = true;
+        return;
       }
     },
 
