@@ -18,7 +18,7 @@
 
         <v-row class="text-editor-container">
           <!-- <v-textarea outlined v-model="description" label="Description*" required rows="15"></v-textarea> -->
-          <RichTextEditor v-model="description"></RichTextEditor>
+          <RichTextEditor v-model="description" :restrictHeight="true"></RichTextEditor>
         </v-row>
 
         <v-row>
@@ -188,7 +188,7 @@ export default {
       }
     },
     cancel() {
-      this.$router.push('/');
+      this.$router.push('/dashboard');
     }
   },
   components: {
