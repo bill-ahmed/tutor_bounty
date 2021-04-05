@@ -9,10 +9,17 @@
         <!-- Left actions -->
         <v-col cols="4" class="ncol rounded">
           <div id="meeting_info_container" class="n-elevation-1">
-            <div class="nrow">
+            <div class="nrow align-center">
+              <v-btn icon small>
+                <v-icon> fa fa-chevron-left </v-icon>
+              </v-btn>
+
               <h2 class="">
                 {{userPosting.title}}
               </h2>
+
+              <v-chip label color="primary" small style="margin-left: 10px;"> {{userPosting.category}} </v-chip>
+              <v-spacer />
             </div>
             
             <!-- Who is in this meeting -->
@@ -20,9 +27,13 @@
               <v-subheader style="padding: 0;"> {{meetingDetails.host.username}}, {{meetingDetails.tutor.username}} </v-subheader>
             </div>
             
-            <!-- User posting category + connection status -->
+            <!-- Controls + connection status -->
             <div class="nrow flex-wrap align-center">
-              <v-chip label color="primary" small> {{userPosting.category}} </v-chip>
+              <v-btn outlined small @click="endMeeting()" color="error">
+                End Meeting
+                <v-icon right small> fa fa-sign-out-alt </v-icon>
+              </v-btn>
+
               <v-spacer/>
               <v-chip label :color="getConnectionColour()"> 
                 <v-progress-circular v-if="!isConnected && !error" :size="20" :width="3" indeterminate style="margin-right: 10px;"/>
@@ -94,6 +105,8 @@
         </v-col>
       </v-row>
     </v-col>
+
+    <RateUser :open="ratingOpen" :ratingFor="isHost() ? meetingDetails.host.username : meetingDetails.tutor.username" :onSubmit="submitRating"/>
   </v-container>
 </template>
 
@@ -101,11 +114,13 @@
 import Peer from 'peerjs';
 import { isDevelopmentEnv, MAX_USER_MESSAGE_LENGTH } from '@/../shared/shared_constants';
 import VideoCall from '@/components/shared/VideoCall';
+import RateUser from '@/components/meeting/RateUser';
 
 export default {
   name: 'Meeting',
   components: {
-    VideoCall
+    VideoCall,
+    RateUser
   },
 
   data() {
@@ -134,6 +149,9 @@ export default {
 
       // Detects when user scrolls to top of messages via IntersectionObserver
       scrollObserver: null,
+
+      // Whether rating modal is open or not
+      ratingOpen: false,
 
       loading: true,
       error: null
@@ -324,6 +342,17 @@ export default {
 
       console.log('connecting to', this.isHost() ? tutorId : hostId)
       this.connection = this.peer.connect(this.isHost() ? tutorId : hostId);
+    },
+
+    submitRating(rating) {
+      alert(`Gave rating ${rating}`);
+    },
+
+    endMeeting() {
+      if(confirm('Are you sure you want to end the meeting?'))
+      {
+        this.ratingOpen = true;
+      }
     },
 
     /** Periodically check if peer is connected */

@@ -35,12 +35,10 @@
                 label="Select Webcam*">
                 </v-select>
       </v-col>
-    </v-row>
-    
-    <v-row justify="center" style="flex-grow: 0;">
+      
       <!-- Select audio input -->
       <v-col cols="4">
-      <v-select dense @change="useAudioInputTrack($event)"
+        <v-select dense @change="useAudioInputTrack($event)"
                 :items="allMediaDevices.filter(e => e.kind === 'audioinput').map(e => e.label)" 
                 label="Select Microphone*">
                 </v-select>
@@ -90,8 +88,13 @@ export default {
     this.requestStreamingPermissions();
   },
 
-  beforeDestroy() {
+  async beforeDestroy() {
     this.streamCall?.close();
+
+    (await this.mediaStream.getAudioTracks()[0]).stop();
+    (await this.mediaStream.getVideoTracks()[0]).stop();
+
+    console.log('streams stopped')
   },
 
   methods: {
