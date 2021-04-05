@@ -281,6 +281,9 @@ export default {
         console.log('Error getting meeting details', error);
         this.error = { type: 'unknown' };
         this.isConnected = false;
+
+        if(error.response?.status === 404)
+          this.$router.push('/404');
       }
 
       setTimeout(this.registerDOMEvents, 500);

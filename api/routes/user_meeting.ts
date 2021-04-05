@@ -55,6 +55,9 @@ MeetingRouter.get('/myMeetings', async (req, res) => {
   let hostedMeetings = await UserMeeting.find({ host: userId }).lean().populate('user_posting').populate('tutor', 'username').populate('host', 'username');
   let tutorMeetings = await UserMeeting.find({ tutor: userId }).lean().populate('user_posting').populate('tutor', 'username').populate('host', 'username');
   
+  hostedMeetings = hostedMeetings.filter(m => !m.completed);
+  tutorMeetings = tutorMeetings.filter(m => !m.completed);
+  
   return res.status(200).json({ isHost: hostedMeetings, isTutor: tutorMeetings });
 });
 
@@ -67,6 +70,10 @@ MeetingRouter.get('/myMeetings', async (req, res) => {
  */
 MeetingRouter.get('/:id', UserMeetingAccess, async (req, res) => {
   const meeting = await UserMeeting.findById(req.params.id).populate('host', 'username').populate('tutor', 'username');
+  
+  // If meeting is already done, don't allow it!
+  if(meeting.completed)
+    return res.sendStatus(404);
 
   return res.status(200).json(meeting);
 });
