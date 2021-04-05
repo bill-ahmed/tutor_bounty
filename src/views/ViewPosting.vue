@@ -124,6 +124,7 @@ export default {
 
           try {
             await this.axios.post(`/userPostings/${this.urlId}/accept`);
+            this.$router.push('/dashboard');
 
           } catch (error) {
             this.errors = error.response.data
