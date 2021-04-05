@@ -6,6 +6,7 @@ import UserMeeting, { UserMeetingClass } from "../models/user_meeting/user_meeti
 import MeetingMessages from "../models/user_messages/meeting_messages.model";
 import { MAX_USER_MESSAGE_LENGTH } from "../../shared/shared_constants";
 import logger from "../utils/logger";
+import UserRating from "../models/user_rating/user_rating.model";
 
 const MeetingRouter = Router();
 const bodyParser = require('body-parser');
@@ -127,4 +128,42 @@ MeetingRouter.get('/:id/messages', UserMeetingAccess, async (req, res) => {
 
   return res.status(200).json(messages);
 });
+
+/** Rate the other user in a meeting
+ * 
+ * @route /api/meetings/:id/rate
+ */
+MeetingRouter.post('/:id/rate', bodyParser.json(), UserMeetingAccess, async (req, res) => {
+  await body('rating', 'Rating is required and must be between 1 and 5.').isNumeric().toInt().isLength({ min: 1, max: 5 }).run(req);
+
+  const meeting = await UserMeeting.findById(req.params.id);
+
+  const hostId = meeting.host.toString();
+  const otherId = hostId === (req.user as any).id.toString() ? meeting.tutor : meeting.host;
+
+  const errors = validationResult(req);
+  if(!errors.isEmpty())
+    return res.status(400).json(errors.array({ onlyFirstError: true }));
+  
+  try {
+    await UserRating.create({
+      by: (req.user as any).id,
+      for: otherId,
+      meeting: meeting.id,
+      value: req.body.rating
+    });
+
+    meeting.completed = true;
+    await meeting.save();
+
+    res.sendStatus(200);
+
+  } catch (error) {
+    logger.error('Error rating a meeting.');
+    logger.error(error.stack);
+
+    return res.sendStatus(500);
+  }
+});
+
 export default MeetingRouter;

@@ -106,7 +106,7 @@
       </v-row>
     </v-col>
 
-    <RateUser :open="ratingOpen" :ratingFor="isHost() ? meetingDetails.host.username : meetingDetails.tutor.username" :onSubmit="submitRating"/>
+    <RateUser v-if="!loading" :open="ratingOpen" :ratingFor="isHost() ? meetingDetails.host.username : meetingDetails.tutor.username" :onSubmit="submitRating"/>
   </v-container>
 </template>
 
@@ -344,8 +344,9 @@ export default {
       this.connection = this.peer.connect(this.isHost() ? tutorId : hostId);
     },
 
-    submitRating(rating) {
-      alert(`Gave rating ${rating}`);
+    async submitRating(rating) {
+      await this.axios.post(`/meetings/${this.meetingId}/rate`, { rating });
+      this.$router.push('/dashboard', () => { window.location.reload() })
     },
 
     endMeeting() {

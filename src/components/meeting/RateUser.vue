@@ -20,7 +20,7 @@
         </v-card-text>
 
         <v-card-actions class="justify-center">
-          <v-btn outlined text block>
+          <v-btn @click="onSubmit(rating)" outlined text block>
             Submit
           </v-btn>
         </v-card-actions>
