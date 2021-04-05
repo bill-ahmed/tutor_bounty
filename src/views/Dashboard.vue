@@ -16,6 +16,14 @@
           <MeetingRow :meeting="meeting"/>
         </div>
 
+        <div class="nrow">
+          <p class="text-h6"> Previous meetings </p>
+        </div>
+
+        <div v-for="meeting in pastMeetings" :key="meeting._id">
+          <MeetingRow :meeting="meeting"/>
+        </div>
+
         <div v-if="meetings.length === 0">
           <p class="subtitle">
             <i>
@@ -43,6 +51,7 @@ export default {
     return {
       loading: true,
       meetings: [],
+      pastMeetings: [],
     }
   },
 
@@ -50,14 +59,22 @@ export default {
     /** Get list of all meetings that this user is involved in. */
     async getData() {
       try {
-        let { isHost, isTutor } = (await this.axios.get('/meetings/myMeetings')).data;
+        let { isHost, isTutor, completed } = (await this.axios.get('/meetings/myMeetings')).data;
         this.meetings = [...isHost, ...isTutor];
+        this.pastMeetings = [...completed];
+
+        // Sort them
+        this.meetings.sort(this.dateSort);
+        this.pastMeetings.sort(this.dateSort);
 
         this.loading = false;
 
       } catch (error) {
         console.error('Error getting my meetings.', error);
       }
+    },
+    dateSort(a, b) {
+      return new Date(a.user_posting.startDate) > new Date(b.user_posting.startDate) ? 1 : -1
     }
   }
 }

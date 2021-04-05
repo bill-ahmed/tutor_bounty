@@ -54,11 +54,12 @@ MeetingRouter.get('/myMeetings', async (req, res) => {
   // Get list of meetings where user is a host OR tutor
   let hostedMeetings = await UserMeeting.find({ host: userId }).lean().populate('user_posting').populate('tutor', 'username').populate('host', 'username');
   let tutorMeetings = await UserMeeting.find({ tutor: userId }).lean().populate('user_posting').populate('tutor', 'username').populate('host', 'username');
-  
+  let completedMeetings = [...hostedMeetings.filter(m => m.completed), ...tutorMeetings.filter(m => m.completed)];
+
   hostedMeetings = hostedMeetings.filter(m => !m.completed);
-  tutorMeetings = tutorMeetings.filter(m => !m.completed);
+  tutorMeetings = tutorMeetings.filter(m => !m.completed); 
   
-  return res.status(200).json({ isHost: hostedMeetings, isTutor: tutorMeetings });
+  return res.status(200).json({ isHost: hostedMeetings, isTutor: tutorMeetings, completed: completedMeetings });
 });
 
 
