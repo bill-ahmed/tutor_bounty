@@ -10,7 +10,7 @@
         <v-col cols="4" class="ncol rounded">
           <div id="meeting_info_container" class="n-elevation-1">
             <div class="nrow align-center">
-              <v-btn icon small>
+              <v-btn @click="$router.back()" icon small>
                 <v-icon> fa fa-chevron-left </v-icon>
               </v-btn>
 
@@ -29,13 +29,13 @@
             
             <!-- Controls + connection status -->
             <div class="nrow flex-wrap align-center">
-              <v-btn outlined small @click="endMeeting()" color="error">
+              <v-btn v-if="!meetingDetails.completed" outlined small @click="endMeeting()" color="error">
                 End Meeting
                 <v-icon right small> fa fa-sign-out-alt </v-icon>
               </v-btn>
 
               <v-spacer/>
-              <v-chip label :color="getConnectionColour()"> 
+              <v-chip v-if="!meetingDetails.completed" label :color="getConnectionColour()"> 
                 <v-progress-circular v-if="!isConnected && !error" :size="20" :width="3" indeterminate style="margin-right: 10px;"/>
 
                 {{getConnectionMessage()}} 
@@ -84,7 +84,7 @@
             </div>
             
             <!-- Textfield to send a new message -->
-            <div class="nrow" style="padding: 0 10px;">
+            <div v-if="!meetingDetails.completed" class="nrow" style="padding: 0 10px;">
               <v-textarea dense v-model="message" rows="1" required autofocus outlined type="text" placeholder="Enter a message..." hint="Shift + Enter for more lines."
                 append-outer-icon="fa fa-paper-plane"
                 @click:append-outer="sendMessage()"
@@ -100,7 +100,10 @@
         <!-- Video call -->
         <v-col class="rounded">
           <div class="nrow grow" id="video_container">
-            <VideoCall v-if="!loading" :peer="peer" :isHost="isHost()" :peerId="isHost() ? meetingDetails.tutor._id + '_' + meetingDetails._id : meetingDetails.host._id + '_' + meetingDetails._id"> </VideoCall>
+            <VideoCall v-if="!loading && !meetingDetails.completed" :peer="peer" :isHost="isHost()" :peerId="isHost() ? meetingDetails.tutor._id + '_' + meetingDetails._id : meetingDetails.host._id + '_' + meetingDetails._id"> </VideoCall>
+            <v-row justify="center" align="center" v-if="meetingDetails.completed">
+              <p class="text-h5"> This meeting has already concluded and is read-only. </p>
+            </v-row>
           </div>
         </v-col>
       </v-row>
@@ -262,18 +265,21 @@ export default {
 
         console.log('>> Is Host? ', this.isHost());
         
-        this.connectToPeer();
-        this.connection.on('open', () => {
-          console.log('Ready to talk!');
-          this.isConnected = true;
-        });
+        if(!this.meetingDetails.completed)
+        {
+          this.connectToPeer();
+          this.connection.on('open', () => {
+            console.log('Ready to talk!');
+            this.isConnected = true;
+          });
 
-        this.connection.on('data', (data) => {
-          this.handleMessageRecieved(data);
-        });
+          this.connection.on('data', (data) => {
+            this.handleMessageRecieved(data);
+          });
 
-        this.handlePeerSetup();
-        this.backgroundRefresh();
+          this.handlePeerSetup();
+          this.backgroundRefresh();
+        }
 
         this.loading = false;
 

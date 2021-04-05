@@ -70,10 +70,6 @@ MeetingRouter.get('/myMeetings', async (req, res) => {
  */
 MeetingRouter.get('/:id', UserMeetingAccess, async (req, res) => {
   const meeting = await UserMeeting.findById(req.params.id).populate('host', 'username').populate('tutor', 'username');
-  
-  // If meeting is already done, don't allow it!
-  if(meeting.completed)
-    return res.sendStatus(404);
 
   return res.status(200).json(meeting);
 });
@@ -90,6 +86,9 @@ MeetingRouter.post('/:id/sendMessage', bodyParser.json(), UserMeetingAccess, asy
     return res.status(400).json(errors.array({ onlyFirstError: true }));
 
   const meeting = await UserMeeting.findById(req.params.id);
+
+  if(meeting.completed)
+    return res.sendStatus(400);
 
   const hostId = meeting.host.toString();
   const isHost = hostId === (req.user as any).id.toString();
@@ -144,6 +143,9 @@ MeetingRouter.post('/:id/rate', bodyParser.json(), UserMeetingAccess, async (req
   await body('rating', 'Rating is required and must be between 1 and 5.').isNumeric().toInt().isLength({ min: 1, max: 5 }).run(req);
 
   const meeting = await UserMeeting.findById(req.params.id);
+
+  if(meeting.completed)
+    return res.sendStatus(400);
 
   const hostId = meeting.host.toString();
   const otherId = hostId === (req.user as any).id.toString() ? meeting.tutor : meeting.host;
