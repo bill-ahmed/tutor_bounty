@@ -17,15 +17,21 @@
               <h2 class="">
                 {{userPosting.title}}
               </h2>
-
-              <v-chip label color="primary" small style="margin-left: 10px;"> {{userPosting.category}} </v-chip>
-              <v-spacer />
             </div>
             
             <!-- Who is in this meeting -->
             <div class="nrow">
-              <v-subheader style="padding: 0;"> {{meetingDetails.host.username}}, {{meetingDetails.tutor.username}} </v-subheader>
+              <v-subheader style="padding: 0; margin-left: 38px;"> {{meetingDetails.host.username}}, {{meetingDetails.tutor.username}} </v-subheader>
             </div>
+
+            <div class="nrow align-center flex-wrap">
+              <v-chip label color="primary" small style="margin-left: 38px;"> {{userPosting.category}} </v-chip>
+              <v-btn target="blank" :href="`/#/postings/${userPosting._id}`" small text style="margin-left: 10px"> 
+                Posting 
+                <v-icon small right> fa fa-external-link-alt </v-icon>
+              </v-btn>
+            </div>
+            <br/>
             
             <!-- Controls + connection status -->
             <div class="nrow flex-wrap align-center">

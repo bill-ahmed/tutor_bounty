@@ -40,7 +40,7 @@
             <v-avatar left>
               <v-icon> fa fa-calendar </v-icon>
             </v-avatar>
-            {{userPost.startDate}} 
+            {{new Date(userPost.startDate).toLocaleString()}} 
           </v-chip>
         </div>
 
