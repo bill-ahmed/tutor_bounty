@@ -8,6 +8,7 @@
         
         <br/>
 
+        <!-- Upcoming meetings -->
         <div class="nrow">
           <p class="text-h6"> My upcoming meetings </p>
         </div>
@@ -16,6 +17,16 @@
           <MeetingRow :meeting="meeting"/>
         </div>
 
+        <div v-if="meetings.length === 0">
+          <p class="subtitle">
+            <i>
+              Looks like you haven't accepted any posting!
+            </i>
+          </p>
+        </div>
+        <br/>
+
+        <!-- Past meetings -->
         <div class="nrow">
           <p class="text-h6"> Previous meetings </p>
         </div>
@@ -24,10 +35,10 @@
           <MeetingRow :meeting="meeting"/>
         </div>
 
-        <div v-if="meetings.length === 0">
+        <div v-if="pastMeetings.length === 0">
           <p class="subtitle">
             <i>
-              Looks like you haven't accepted any posting!
+              All previously ended meetings will show up here.
             </i>
           </p>
         </div>
