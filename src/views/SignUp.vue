@@ -141,7 +141,7 @@ export default {
   margin-top: 25px;
 
   animation-name: slide_up;
-  animation-duration: 0.5s;
+  animation-duration: 0.3s;
 }
 
 .signup-promo {

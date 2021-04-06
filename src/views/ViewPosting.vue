@@ -78,7 +78,7 @@
           </div>
 
           <div class="nrow">
-            <ErrorAlert :errors="errors"></ErrorAlert>
+            <ErrorAlert :fullWidth="true" :errors="errors"></ErrorAlert>
           </div>
         </div>
       </v-col>
