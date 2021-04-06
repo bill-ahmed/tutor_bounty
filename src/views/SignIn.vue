@@ -78,19 +78,9 @@ export default {
   padding-top: 10px;
   min-height: 100%;
 
-    --bg: rgba(25, 118, 210, 0.20);
+  --bg: rgba(25, 118, 210, 0.18);
 
-  // Taken with help from: https://stackoverflow.com/questions/36873711/how-can-i-have-background-shapes-with-css/36874413
-  background: 
-      /* bottom part */
-    linear-gradient(to bottom left, var(--bg) 50%, transparent 0%) no-repeat bottom,
-    /* top portion */
-    linear-gradient(0deg, var(--bg), var(--bg)) no-repeat top;
-
-    
-
-  padding-bottom: 0em;
-  background-size: 100% 75%, 100% calc(100% - 75%);
+  background: linear-gradient(-10deg, var(--bg) 50%, transparent 0%) no-repeat bottom;
 }
 
 .signin-container {
@@ -101,9 +91,22 @@ export default {
 
   min-width: 350px; 
   text-align: center;
+
+  animation-name: slide_up;
+  animation-duration: 0.3s;
   
   p {
     margin: 0;
+  }
+}
+
+@keyframes slide_up {
+  0% {
+    margin-top: 3.5%;
+  }
+
+  100% {
+    margin-top: 3%;
   }
 }
 </style>
