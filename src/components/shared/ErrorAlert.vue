@@ -2,7 +2,7 @@
   <v-row justify="center">
     <v-spacer v-if="!fullWidth"/>
     <v-col>
-      <v-alert v-for="err in errors" :key="(err.msg || err.message)" elevation="4" dismissible type="error" min-width="350px" :max-width="fullWidth ? '' : '700px'">
+      <v-alert v-for="err in errors" :key="(err.msg || err.message)" transition="scroll-x-transition" elevation="4" dismissible type="error" min-width="350px" :max-width="fullWidth ? '' : '700px'">
         {{ err.msg || err.message }}
       </v-alert>
     </v-col>
