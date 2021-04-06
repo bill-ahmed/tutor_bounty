@@ -16,6 +16,9 @@ export class UserMeetingClass {
 
   @prop({ required: true, ref: () => UserPostingClass, autopopulate: { maxDepth: 1 } })
   user_posting: Ref<UserPostingClass>
+
+  @prop({ default: false })
+  completed?: boolean
 }
 
 const UserMeeting = getModelForClass(UserMeetingClass, { schemaOptions: { collection: 'user_meetings', timestamps: true } })

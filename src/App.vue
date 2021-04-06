@@ -1,6 +1,6 @@
 <template>
   <v-app id="app">
-    <v-app-bar color="white" app flat>
+    <v-app-bar color="white" app flat style="position: relative;">
       <v-spacer style="max-width: 100px;"/>
       <div @click="goHome()" id="app_heading_text">
         Tutor Bounty
@@ -19,7 +19,7 @@
       
     </v-app-bar>
 
-    <v-content>
+    <v-content style="padding: 0;">
       <router-view :key="$route.fullPath"/>
     </v-content>
 

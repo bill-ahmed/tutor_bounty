@@ -23,7 +23,8 @@
       </v-col>
 
       <!-- Additional info about the posting -->
-      <v-col id="posting-more-info" class="n-elevation-1" cols="3">
+      <v-col cols="3" id="posting-more-info-container">
+        <div id="posting-more-info" class="n-elevation-1" >
         <div class="text-h6 subtitle" style="margin-bottom: 10px;"> About </div>
 
         <div class="nrow">
@@ -40,7 +41,7 @@
             <v-avatar left>
               <v-icon> fa fa-calendar </v-icon>
             </v-avatar>
-            {{userPost.startDate}} 
+            {{new Date(userPost.startDate).toLocaleString()}} 
           </v-chip>
         </div>
 
@@ -77,6 +78,7 @@
           >
             Cancel
           </v-btn>
+        </div>
         </div>
       </v-col>
     </v-row>
@@ -122,6 +124,7 @@ export default {
 
           try {
             await this.axios.post(`/userPostings/${this.urlId}/accept`);
+            this.$router.push('/dashboard');
 
           } catch (error) {
             this.errors = error.response.data
@@ -152,8 +155,22 @@ export default {
   border: solid 2px rgba(0, 0, 0, 0.06);
 }
 
+#posting-more-info-container {
+  padding-top: 30px; 
+  position: sticky; 
+  top: 0; 
+  
+  max-height: 500px; 
+
+  padding: 0;
+  padding-top: 25px;
+}
+
 #posting-more-info {
   border-radius: 10px;
+  padding: 15px;
+  height: 100%;
+
 
   display: flex;
   flex-direction: column;

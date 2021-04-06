@@ -23,13 +23,6 @@
             </v-btn>
           </v-row>
 
-          <v-row justify="center">
-            <v-btn block :ripple="false" text>
-              <v-icon small left> fa fa-user </v-icon>
-              MY Profile
-            </v-btn>
-          </v-row>
-
           <v-divider/>
 
           <v-row justify="center">

@@ -9,7 +9,11 @@
         <!-- Left actions -->
         <v-col cols="4" class="ncol rounded">
           <div id="meeting_info_container" class="n-elevation-1">
-            <div class="nrow">
+            <div class="nrow align-center">
+              <v-btn @click="$router.back()" icon small>
+                <v-icon> fa fa-chevron-left </v-icon>
+              </v-btn>
+
               <h2 class="">
                 {{userPosting.title}}
               </h2>
@@ -17,14 +21,27 @@
             
             <!-- Who is in this meeting -->
             <div class="nrow">
-              <v-subheader style="padding: 0;"> {{meetingDetails.host.username}}, {{meetingDetails.tutor.username}} </v-subheader>
+              <v-subheader style="padding: 0; margin-left: 38px;"> {{meetingDetails.host.username}}, {{meetingDetails.tutor.username}} </v-subheader>
             </div>
+
+            <div class="nrow align-center flex-wrap">
+              <v-chip label color="primary" small style="margin-left: 38px;"> {{userPosting.category}} </v-chip>
+              <v-btn target="blank" :href="`/#/postings/${userPosting._id}`" small text style="margin-left: 10px"> 
+                Posting 
+                <v-icon small right> fa fa-external-link-alt </v-icon>
+              </v-btn>
+            </div>
+            <br/>
             
-            <!-- User posting category + connection status -->
+            <!-- Controls + connection status -->
             <div class="nrow flex-wrap align-center">
-              <v-chip label color="primary" small> {{userPosting.category}} </v-chip>
+              <v-btn v-if="!meetingDetails.completed" outlined small @click="endMeeting()" color="error">
+                End Meeting
+                <v-icon right small> fa fa-sign-out-alt </v-icon>
+              </v-btn>
+
               <v-spacer/>
-              <v-chip label :color="getConnectionColour()"> 
+              <v-chip v-if="!meetingDetails.completed" label :color="getConnectionColour()"> 
                 <v-progress-circular v-if="!isConnected && !error" :size="20" :width="3" indeterminate style="margin-right: 10px;"/>
 
                 {{getConnectionMessage()}} 
@@ -73,7 +90,7 @@
             </div>
             
             <!-- Textfield to send a new message -->
-            <div class="nrow" style="padding: 0 10px;">
+            <div v-if="!meetingDetails.completed" class="nrow" style="padding: 0 10px;">
               <v-textarea dense v-model="message" rows="1" required autofocus outlined type="text" placeholder="Enter a message..." hint="Shift + Enter for more lines."
                 append-outer-icon="fa fa-paper-plane"
                 @click:append-outer="sendMessage()"
@@ -89,11 +106,16 @@
         <!-- Video call -->
         <v-col class="rounded">
           <div class="nrow grow" id="video_container">
-            <VideoCall v-if="!loading" :peer="peer" :isHost="isHost()" :peerId="isHost() ? meetingDetails.tutor._id + '_' + meetingDetails._id : meetingDetails.host._id + '_' + meetingDetails._id"> </VideoCall>
+            <VideoCall v-if="!loading && !meetingDetails.completed" :peer="peer" :isHost="isHost()" :peerId="isHost() ? meetingDetails.tutor._id + '_' + meetingDetails._id : meetingDetails.host._id + '_' + meetingDetails._id"> </VideoCall>
+            <v-row justify="center" align="center" v-if="meetingDetails.completed">
+              <p class="text-h5"> This meeting has already concluded and is read-only. </p>
+            </v-row>
           </div>
         </v-col>
       </v-row>
     </v-col>
+
+    <RateUser v-if="!loading" :open="ratingOpen" :ratingFor="isHost() ? meetingDetails.host.username : meetingDetails.tutor.username" :onSubmit="submitRating"/>
   </v-container>
 </template>
 
@@ -101,11 +123,13 @@
 import Peer from 'peerjs';
 import { isDevelopmentEnv, MAX_USER_MESSAGE_LENGTH } from '@/../shared/shared_constants';
 import VideoCall from '@/components/shared/VideoCall';
+import RateUser from '@/components/meeting/RateUser';
 
 export default {
   name: 'Meeting',
   components: {
-    VideoCall
+    VideoCall,
+    RateUser
   },
 
   data() {
@@ -134,6 +158,9 @@ export default {
 
       // Detects when user scrolls to top of messages via IntersectionObserver
       scrollObserver: null,
+
+      // Whether rating modal is open or not
+      ratingOpen: false,
 
       loading: true,
       error: null
@@ -199,7 +226,7 @@ export default {
       }
 
       let createdAt = Date.now();
-      let newMessage = { from: this.$currentUser._id, content: this.message, createdAt }
+      let newMessage = { from: this.$currentUser._id, content: this.message, createdAt, type: 'meeting_ended' }
 
       this.messages.push(newMessage);
       this.connection.send(newMessage);
@@ -211,6 +238,12 @@ export default {
     },
 
     handleMessageRecieved(message) {
+      console.log(message);
+      if(message.type === 'meeting_end')
+      {
+        this.endMeeting(false, true);
+        return;
+      }
       this.messages.push(message);
       this.scrollToBottomOfMessages();
     },
@@ -244,18 +277,21 @@ export default {
 
         console.log('>> Is Host? ', this.isHost());
         
-        this.connectToPeer();
-        this.connection.on('open', () => {
-          console.log('Ready to talk!');
-          this.isConnected = true;
-        });
+        if(!this.meetingDetails.completed)
+        {
+          this.connectToPeer();
+          this.connection.on('open', () => {
+            console.log('Ready to talk!');
+            this.isConnected = true;
+          });
 
-        this.connection.on('data', (data) => {
-          this.handleMessageRecieved(data);
-        });
+          this.connection.on('data', (data) => {
+            this.handleMessageRecieved(data);
+          });
 
-        this.handlePeerSetup();
-        this.backgroundRefresh();
+          this.handlePeerSetup();
+          this.backgroundRefresh();
+        }
 
         this.loading = false;
 
@@ -263,6 +299,9 @@ export default {
         console.log('Error getting meeting details', error);
         this.error = { type: 'unknown' };
         this.isConnected = false;
+
+        if(error.response?.status === 404)
+          this.$router.push('/404');
       }
 
       setTimeout(this.registerDOMEvents, 500);
@@ -324,6 +363,24 @@ export default {
 
       console.log('connecting to', this.isHost() ? tutorId : hostId)
       this.connection = this.peer.connect(this.isHost() ? tutorId : hostId);
+    },
+
+    async submitRating(rating) {
+      await this.axios.post(`/meetings/${this.meetingId}/rate`, { rating });
+      this.$router.push('/dashboard', () => { window.location.reload() })
+    },
+
+    endMeeting(sendTerminatingMessage = true, skipConfirm = false) {
+      
+
+      if(skipConfirm || confirm('Are you sure you want to end the meeting?'))
+      {
+        if(sendTerminatingMessage)
+          this.connection.send({ type: 'meeting_end' });
+
+        this.ratingOpen = true;
+        return;
+      }
     },
 
     /** Periodically check if peer is connected */

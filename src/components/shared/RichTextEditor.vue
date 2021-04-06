@@ -138,7 +138,7 @@
       </v-toolbar>
     </editor-menu-bar>
 
-    <editor-content class="editor__content" :editor="editor" />
+    <editor-content class="editor__content" :style="restrictHeight ? 'max-height: 60vh;' : ''" :editor="editor" />
   </v-container>
 </template>
 
@@ -172,7 +172,7 @@ export default {
     EditorContent,
     EditorMenuBar
   },
-  props: ['value', 'content', 'isEditable'],
+  props: ['value', 'content', 'isEditable', 'restrictHeight'],
   data(){
     return {
       editor: new Editor({
@@ -250,7 +250,6 @@ export default {
   padding: 10px;
 
   min-height: 300px;
-  max-height: 60vh;
 
   overflow-y: scroll;
 
