@@ -55,13 +55,19 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .host_container, .tutor_container {
   border-radius: 8px;
   box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.05), 0 3px 10px 0 rgba(0, 0, 0, 0.1);
 
   margin: 20px 0;
   cursor: pointer;
+
+  &:hover {
+    background: #EEEEEE;
+  }
+
+  min-width: 350px;
 }
 
 .host_container {
@@ -73,7 +79,7 @@ export default {
 }
 
 .v-chip {
-  margin: 0 5px;
+  margin: 2px 5px;
 }
 
 p {

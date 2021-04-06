@@ -21,7 +21,7 @@
           <RichTextEditor v-model="description" :restrictHeight="true"></RichTextEditor>
         </v-row>
 
-        <v-row>
+        <v-row style="margin-top: 30px;">
           <ErrorAlert :errors="errors" :fullWidth="true"></ErrorAlert>
         </v-row>
       </v-col>
@@ -145,7 +145,7 @@ export default {
       dateStart: new Date().toISOString().substr(0, 10),
 
       timeStartMenu: false,
-      timeStart: null,
+      timeStart: "00:00",
 
       ALLOWED_MEETING_DURATIONS,
       ALLOWED_USER_POSTING_CATEGORIES,

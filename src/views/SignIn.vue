@@ -1,9 +1,9 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <ErrorAlert :errors="errors"></ErrorAlert>
 
-    <v-row justify="center" style="margin-bottom: 10px;">
-      <v-col style="min-width: 350px; text-align: center;" cols="4" class="signin-container n-elevation-1">
+    <v-row justify="center" align="center" style="margin-bottom: 10px;">
+      <v-col cols="3" class="signin-container n-elevation-1">
         <h1> Login </h1>
         <v-card-subtitle> Sign in to continue. </v-card-subtitle>
         <br/>
@@ -72,12 +72,41 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.container {
+  padding: 0;
+  padding-top: 10px;
+  min-height: 100%;
+
+  --bg: rgba(25, 118, 210, 0.18);
+
+  background: linear-gradient(-10deg, var(--bg) 50%, transparent 0%) no-repeat bottom;
+}
+
 .signin-container {
   border-top: solid 6px var(--v-primary-base);
+  background-color: #ffffff;
+  
+  margin-top: 3%;
 
+  min-width: 350px; 
+  text-align: center;
+
+  animation-name: slide_up;
+  animation-duration: 0.3s;
+  
   p {
     margin: 0;
+  }
+}
+
+@keyframes slide_up {
+  0% {
+    margin-top: 3.5%;
+  }
+
+  100% {
+    margin-top: 3%;
   }
 }
 </style>

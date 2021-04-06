@@ -1,8 +1,5 @@
 <template>
   <v-container>
-    <v-row>
-      <ErrorAlert :errors="errors"></ErrorAlert>
-    </v-row>
     <v-row v-if="userPost" justify="center" style="margin: 40px 0;">
       <!-- The posting itself -->
       <v-col id="posting-view" cols="7">
@@ -25,60 +22,64 @@
       <!-- Additional info about the posting -->
       <v-col cols="3" id="posting-more-info-container">
         <div id="posting-more-info" class="n-elevation-1" >
-        <div class="text-h6 subtitle" style="margin-bottom: 10px;"> About </div>
+          <div class="text-h6 subtitle" style="margin-bottom: 10px;"> About </div>
 
-        <div class="nrow">
-          <v-chip label dark class="large-label">
-            <v-avatar left>
-              <v-icon> fa fa-user </v-icon>
-            </v-avatar>
-            {{userPost.user.username}} 
-          </v-chip>
-        </div>
+          <div class="nrow">
+            <v-chip label dark class="large-label">
+              <v-avatar left>
+                <v-icon> fa fa-user </v-icon>
+              </v-avatar>
+              {{userPost.user.username}} 
+            </v-chip>
+          </div>
 
-        <div class="nrow">
-          <v-chip label outlined color="black" class="large-label">
-            <v-avatar left>
-              <v-icon> fa fa-calendar </v-icon>
-            </v-avatar>
-            {{new Date(userPost.startDate).toLocaleString()}} 
-          </v-chip>
-        </div>
+          <div class="nrow">
+            <v-chip label outlined color="black" class="large-label">
+              <v-avatar left>
+                <v-icon> fa fa-calendar </v-icon>
+              </v-avatar>
+              {{new Date(userPost.startDate).toLocaleString()}} 
+            </v-chip>
+          </div>
 
-        <div class="nrow">
-          <v-chip label outlined color="black" class="large-label">
-            <v-avatar left>
-              <v-icon> fa fa-stopwatch </v-icon>
-            </v-avatar>
-            {{userPost.duration}} 
-          </v-chip>
-        </div>
-        
-        <v-spacer/>
+          <div class="nrow">
+            <v-chip label outlined color="black" class="large-label">
+              <v-avatar left>
+                <v-icon> fa fa-stopwatch </v-icon>
+              </v-avatar>
+              {{userPost.duration}} 
+            </v-chip>
+          </div>
+          
+          <v-spacer/>
 
-        <div class="nrow justify-center">
-          <v-btn
-            color="primary"
-            depressed
-            block
-            @click="accept()"
-            :loading="loading"
-          >
-            Accept
-          </v-btn>
-        </div>
+          <div class="nrow justify-center">
+            <v-btn
+              color="primary"
+              depressed
+              block
+              @click="accept()"
+              :loading="loading"
+            >
+              Accept
+            </v-btn>
+          </div>
 
-        <div class="nrow justify-center" style="margin-bottom: 50px;">
-          <v-btn
-            block
-            text
-            outlined
-            @click="cancel()"
-            :disabled="loading"
-          >
-            Cancel
-          </v-btn>
-        </div>
+          <div class="nrow justify-center" style="margin-bottom: 50px;">
+            <v-btn
+              block
+              text
+              outlined
+              @click="cancel()"
+              :disabled="loading"
+            >
+              Cancel
+            </v-btn>
+          </div>
+
+          <div class="nrow">
+            <ErrorAlert :fullWidth="true" :errors="errors"></ErrorAlert>
+          </div>
         </div>
       </v-col>
     </v-row>
