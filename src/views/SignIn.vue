@@ -1,9 +1,9 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <ErrorAlert :errors="errors"></ErrorAlert>
 
-    <v-row justify="center" style="margin-bottom: 10px;">
-      <v-col style="min-width: 350px; text-align: center;" cols="4" class="signin-container n-elevation-1">
+    <v-row justify="center" align="center" style="margin-bottom: 10px;">
+      <v-col cols="3" class="signin-container n-elevation-1">
         <h1> Login </h1>
         <v-card-subtitle> Sign in to continue. </v-card-subtitle>
         <br/>
@@ -72,10 +72,36 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.container {
+  padding: 0;
+  padding-top: 10px;
+  min-height: 100%;
+
+    --bg: rgba(25, 118, 210, 0.20);
+
+  // Taken with help from: https://stackoverflow.com/questions/36873711/how-can-i-have-background-shapes-with-css/36874413
+  background: 
+      /* bottom part */
+    linear-gradient(to bottom left, var(--bg) 50%, transparent 0%) no-repeat bottom,
+    /* top portion */
+    linear-gradient(0deg, var(--bg), var(--bg)) no-repeat top;
+
+    
+
+  padding-bottom: 0em;
+  background-size: 100% 75%, 100% calc(100% - 75%);
+}
+
 .signin-container {
   border-top: solid 6px var(--v-primary-base);
+  background-color: #ffffff;
+  
+  margin-top: 3%;
 
+  min-width: 350px; 
+  text-align: center;
+  
   p {
     margin: 0;
   }

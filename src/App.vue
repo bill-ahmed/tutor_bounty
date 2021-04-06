@@ -58,4 +58,8 @@ export default {
 
   cursor: pointer;
 }
+
+#app {
+  background: none;
+}
 </style>
