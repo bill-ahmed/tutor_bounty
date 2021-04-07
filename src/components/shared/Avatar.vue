@@ -3,8 +3,7 @@
     <template v-slot:activator="{ on }">
       <v-btn dark icon x-large v-on="on" :ripple="false">
         <v-avatar color="primary" size="48">
-          <img v-if="$currentUser.profileImageURL" :src="$currentUser.profileImageURL"/>
-          <span v-else> {{ usernameInitials }} </span>
+          <span> {{ usernameInitials }} </span>
         </v-avatar>
       </v-btn>
     </template>
@@ -47,7 +46,14 @@ export default {
   computed: {
     usernameInitials: function() {
       let { name, username } = this.$currentUser;
-      return (name || username).slice(0, 1).toUpperCase();
+      name = (name || username);
+      
+      let segments = name.split(' ');
+
+      if(segments.length === 2)
+        return (segments[0].slice(0, 1) + segments[1].slice(0, 1)).toUpperCase();
+
+      return name.slice(0, 1).toUpperCase();
     }
   }
 }
