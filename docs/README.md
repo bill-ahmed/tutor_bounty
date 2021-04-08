@@ -220,3 +220,103 @@ $ curl -H "Content-Type: application/json"\
       -X POST\
        http://localhost:3000/api/userPostings/12345/accept'
 ```
+
+## User Meeting API
+
+### List of my meetings
+- description: Get list of meetings for current user
+- request: `GET /api/meetings/myMeetings`
+
+- response: 200
+  - content-type: `application/json`
+  - body: Array<object>
+    - host: (string) ID of the host
+    - tutor: (string) ID of the tutor
+    - user_posting: (object) Same as what's given by `/api/userPostings/:id`
+    - completed: (boolean) Whether meeting has ended or not
+
+``` 
+$ curl -H "Content-Type: application/json"\ 
+      -X GET\
+       http://localhost:3000/api/meetings/myMeetings'
+```
+
+### Details about a meeting
+- description: Detailed info about meeting with given id
+- request: `GET /api/meetings/:id`
+
+- response: 200
+  - content-type: `application/json`
+  - body: object
+    - host: (string) ID of the host
+    - tutor: (string) ID of the tutor
+    - user_posting: (object) Same as what's given by `/api/userPostings/:id`
+    - completed: (boolean) Whether meeting has ended or not
+
+``` 
+$ curl -H "Content-Type: application/json"\ 
+      -X GET\
+       http://localhost:3000/api/meetings/123456'
+```
+
+### Send a message
+- description: Send given message to everyone in the meeting room
+- request: `POST /api/meetings/:id/sendMessage`
+  - content-type: `application/json`
+  - body: object
+    - message: (string) the message to send, maximum allowed length is 2000 characters
+
+- response: 200
+- response: 400
+  - content-type: `application/json`
+  - body: object
+    - { msg: string }[]
+
+- response: 500
+
+``` 
+$ curl -H "Content-Type: application/json"\ 
+      -X POST\
+      --data '{ "message": "hello world" }'\
+       http://localhost:3000/api/meetings/123456/sendMessage'
+```
+
+### Get messages
+- description: Get last 15 messages that were sent in the room, with pagination support
+- request: `GET /api/meetings/:id/messages?page=0`
+
+- response: 200
+  - content-type: `application/json`
+  - body: Array<object>
+    - user_meeting: (string) id of the meeting
+    - to: (string) id of the person it was sent to
+    - from: (string) id of the person it was from
+    - content: (string) body of the message
+
+``` 
+$ curl -H "Content-Type: application/json"\ 
+      -X GET\
+      --data '{ "message": "hello world" }'\
+       http://localhost:3000/api/meetings/123456/sendMessage'
+```
+
+### Rate meeting
+- description: Give the other person a rating from 1-5
+- request: `GET /api/meetings/:id/rate`
+  - content-type: `application/json`
+  - body: object
+    - rating: (number) between 1-5 rating
+
+- response: 200
+- response: 400
+  - content-type: `application/json`
+  - body: object
+    - { msg: string }[]
+
+- response: 500
+``` 
+$ curl -H "Content-Type: application/json"\ 
+      -X GET\
+      --data '{ "message": "hello world" }'\
+       http://localhost:3000/api/meetings/123456/sendMessage'
+```
