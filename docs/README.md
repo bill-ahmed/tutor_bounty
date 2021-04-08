@@ -86,7 +86,6 @@ $ curl -H "Content-Type: application/json"\
 - description: Get info about currently signed in user
 - request: `GET /api/currentUser`
 - response: 200
-    - body: N/A
     - content-type: `application/json`
     - body: object
       - username: (string) username of person
@@ -97,4 +96,127 @@ $ curl -H "Content-Type: application/json"\
 $ curl -H "Content-Type: application/json"\ 
       -X GET\
        http://localhost:3000/api/currentUser'
+```
+
+## User Posting API
+
+### Get list of postings
+- description: Get a list of postings based on provided criteria
+- request: `GET /api/userPostings/`
+    - query:
+      - sort: (string) what to sort by
+      - search: (string) search query
+      - priceStart: (string) minimum price
+      - priceEnd: (string) max price
+      - dateStart: (date) earliest possible datew
+      - dateEnd: (date) furthest possible date
+      - duration: (string) length of the meeting required
+      - category: (string) what category it belongs in
+
+- response: 200
+  - content-type: `application/json`
+  - body: Array<object>
+    - title: (string) title of posting
+    - description: (string) details about the posting
+    - startDate: (date) Date to start at
+    - startTime: (date) Time to start at
+    - duration: (string) Number of hours 
+    - category: (string) Which category is belongs to
+    - value: (number) The monetary value in dollars (USD)
+
+
+
+- response: 400
+  - content-type: `application/json`
+  - body: object
+    - { msg: string }[]
+
+- response: 500
+  - content-type: `application/json`
+  - body: object
+    - { msg: string }[]
+
+``` 
+$ curl -H "Content-Type: application/json"\ 
+      -X POST\
+      --data '{ "title": "hi", "description": "bye", "value": "420" }'
+       http://localhost:3000/api/userPostings/new'
+```
+
+### New Posting
+- description: Create a new posting
+- request: `POST /api/userPostings/new`
+    - content-type: `application/json`
+    - body: object
+      - title: (string) title of posting
+      - description: (string) details about the posting
+      - startDate: (date) Date to start at
+      - startTime: (date) Time to start at
+      - duration: (string) Number of hours 
+      - category: (string) Which category is belongs to
+      - value: (number) The monetary value in dollars (USD)
+
+- response: 200
+
+- response: 400
+  - content-type: `application/json`
+  - body: object
+    - { msg: string }[]
+
+- response: 500
+  - content-type: `application/json`
+  - body: object
+    - { msg: string }[]
+
+``` 
+$ curl -H "Content-Type: application/json"\ 
+      -X POST\
+      --data '{ "title": "hi", "description": "bye", "value": "420" }'
+       http://localhost:3000/api/userPostings/new'
+```
+
+### Detailed posting info
+- description: Get detailed info about a posting
+- request: `GET /api/userPostings/:id`
+
+- response: 200
+    - content-type: `application/json`
+    - body: object
+      - title: (string) title of posting
+      - description: (string) details about the posting
+      - startDate: (date) Date to start at
+      - startTime: (date) Time to start at
+      - duration: (string) Number of hours 
+      - category: (string) Which category is belongs to
+      - value: (number) The monetary value in dollars (USD)
+
+- response: 404
+
+``` 
+$ curl -H "Content-Type: application/json"\ 
+      -X GET\
+       http://localhost:3000/api/userPostings/12345'
+```
+
+### Accept a user posting
+- description: Allow another user to accept a posting with given id
+- request: `POST /api/userPostings/:id/accept`
+
+- response: 200
+
+- response: 400
+  - content-type: `application/json`
+  - body: object
+    - { msg: string }[]
+
+- response: 404
+- response: 500
+  - content-type: `application/json`
+  - body: object
+    - { msg: string }[]
+
+``` 
+$ curl -H "Content-Type: application/json"\ 
+      -X POST\
+       http://localhost:3000/api/userPostings/12345/accept'
 ```
