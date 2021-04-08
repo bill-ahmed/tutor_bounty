@@ -4,6 +4,10 @@ Tutor Bounty
 ## Team Members
 Raiyan Rahman, Bilal Ahmed, Yiming Zhong
 
+## Documentation
+API documentation of all our REST endpoints can be found under `/docs/README.md`.
+
+
 ## Description
 An online platform where students/professionals can offer to teach students seeking to learn more about an area of interest, study for an exam, etc. ~~Kind of like Uber but for online learning.~~
 
