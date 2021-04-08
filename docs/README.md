@@ -72,7 +72,7 @@ $ curl -H "Content-Type: application/json"\
 
 ### Logout
 - description: sign up a new user
-- request: `POST /signup`
+- request: `POST /logout`
 - response: 200
     - body: N/A
 
@@ -115,7 +115,7 @@ $ curl -H "Content-Type: application/json"\
 
 - response: 200
   - content-type: `application/json`
-  - body: Array<object>
+  - body: Array<\object>
     - title: (string) title of posting
     - description: (string) details about the posting
     - startDate: (date) Date to start at
@@ -138,9 +138,9 @@ $ curl -H "Content-Type: application/json"\
 
 ``` 
 $ curl -H "Content-Type: application/json"\ 
-      -X POST\
-      --data '{ "title": "hi", "description": "bye", "value": "420" }'
-       http://localhost:3000/api/userPostings/new'
+      -X GET\
+      --data '{ "search": "some title" }'
+       http://localhost:3000/api/userPostings'
 ```
 
 ### New Posting
@@ -157,6 +157,7 @@ $ curl -H "Content-Type: application/json"\
       - value: (number) The monetary value in dollars (USD)
 
 - response: 200
+  - body: N/A
 
 - response: 400
   - content-type: `application/json`
@@ -191,7 +192,7 @@ $ curl -H "Content-Type: application/json"\
       - value: (number) The monetary value in dollars (USD)
 
 - response: 404
-
+  - body: N/A
 ``` 
 $ curl -H "Content-Type: application/json"\ 
       -X GET\
@@ -203,6 +204,7 @@ $ curl -H "Content-Type: application/json"\
 - request: `POST /api/userPostings/:id/accept`
 
 - response: 200
+  - body: N/A
 
 - response: 400
   - content-type: `application/json`
@@ -210,6 +212,8 @@ $ curl -H "Content-Type: application/json"\
     - { msg: string }[]
 
 - response: 404
+  - body: N/A
+
 - response: 500
   - content-type: `application/json`
   - body: object
@@ -229,7 +233,7 @@ $ curl -H "Content-Type: application/json"\
 
 - response: 200
   - content-type: `application/json`
-  - body: Array<object>
+  - body: Array<\object>
     - host: (string) ID of the host
     - tutor: (string) ID of the tutor
     - user_posting: (object) Same as what's given by `/api/userPostings/:id`
@@ -267,12 +271,15 @@ $ curl -H "Content-Type: application/json"\
     - message: (string) the message to send, maximum allowed length is 2000 characters
 
 - response: 200
+  - body: N/A
+
 - response: 400
   - content-type: `application/json`
   - body: object
     - { msg: string }[]
 
 - response: 500
+  - body: N/A
 
 ``` 
 $ curl -H "Content-Type: application/json"\ 
@@ -287,7 +294,7 @@ $ curl -H "Content-Type: application/json"\
 
 - response: 200
   - content-type: `application/json`
-  - body: Array<object>
+  - body: Array<\object>
     - user_meeting: (string) id of the meeting
     - to: (string) id of the person it was sent to
     - from: (string) id of the person it was from
@@ -299,6 +306,7 @@ $ curl -H "Content-Type: application/json"\
       --data '{ "message": "hello world" }'\
        http://localhost:3000/api/meetings/123456/sendMessage'
 ```
+
 
 ### Rate meeting
 - description: Give the other person a rating from 1-5
