@@ -9,7 +9,7 @@
       <v-spacer class="mx-auto"/>
 
       <v-btn :ripple="false" text v-if="!$currentUser" to="/signin"> Login </v-btn>
-      <v-btn v-if="!$currentUser" to="/signup" text> Sign Up </v-btn>
+      <v-btn v-if="!$currentUser" to="/signup" outlined color="secondary"> Sign Up </v-btn>
 
       <v-btn :ripple="false" text v-if="$currentUser" to="/dashboard"> Dashboard </v-btn>
       <v-btn :ripple="false" text v-if="$currentUser" to="/postings"> Postings </v-btn>

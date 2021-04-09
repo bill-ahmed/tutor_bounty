@@ -1,52 +1,84 @@
 <template>
-  <v-container>
-    <v-img
-      contain
-      max-width="75%"
+  <v-container fluid style="position: relative">
+    <img id="bg_image"
+    width="60%"
       :src="bgImage"
-      style="float: right; margin-right: -13%; margin-top: -10px;"
-    >
-    </v-img>
-    <span style="position: absolute; float: right; margin-left: 2%; margin-top: 15%">
-      <p class="text-center"
-          style="align-items: center;
-                 font-size: 70px;
-                 font-family: Gill Sans;
-                 text-shadow: 2px 2px 5px #9a9b99;">
-          Where students
-        </p>
-        <p class="text-center"
-          style="align-items: center;
-                 font-size: 70px;
-                 font-family: Gill Sans;
-                 text-shadow: 2px 2px 5px #9a9b99;
-                 margin-top: -50px">
-          come together
-        </p>
-        <h4 class="text-center"
-            style="align-items: center;
-                   font-size: 17px;
-                   font-family: Gill Sans;
-                   font-color: #9a9b99;
-                   margin-top: -10px;">
-          Millions of students working together <br/>
-          towards a brighter future &mdash; the most <br/>
-          sophisticated platform for e-learning.
-        </h4>
+    />
+    <span id="header_content">
+      <p id="header_text">
+        Where students <br/> come together.
+      </p>
+
+      <h4 id="header_sub_text">
+        Millions of students working together
+        towards a brighter future &mdash; the most
+        sophisticated platform for e-learning.
+      </h4>
     </span>
   </v-container>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
 
 export default Vue.extend({
   name: 'Home',
   computed: {
     bgImage() {
-      return require('@/media/homepage-bg.jpeg');
+      return require('../media/homepage-bg.jpeg');
     }
   }
 });
 </script>
+
+<style scoped>
+.container {
+  /* height: 100%; */
+  min-height: 80vh;
+}
+
+#header_content {
+  position: absolute; 
+  top: 22%;
+  left: 15%;
+}
+
+#header_text {
+  font-size: 5em;
+  font-family: Gill Sans;
+
+  line-height: 75px;
+}
+
+#header_sub_text {
+  font-size: 21pt;
+  font-weight: 500;
+
+  color: rgba(0, 0, 0, 0.5);
+  
+  margin-left: 10px;
+  max-width: 500px;
+}
+
+#bg_image {
+  position: absolute;
+  opacity: 90%;
+  right: 5%;
+
+  top: 5%;
+}
+
+@media screen and (max-width: 800px) {
+
+  #header_content {
+    top: 10%;
+  }
+
+  #bg_image {
+    width: 100%;
+    right: 0; bottom: 0; left: 0;
+
+    opacity: 50%;
+  }
+}
+</style>
