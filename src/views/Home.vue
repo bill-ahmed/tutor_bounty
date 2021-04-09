@@ -25,7 +25,7 @@ export default Vue.extend({
   name: 'Home',
   computed: {
     bgImage() {
-      return require('../media/homepage-bg.jpeg');
+      return require('@/media/homepage-bg.jpeg');
     }
   }
 });
