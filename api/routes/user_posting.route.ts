@@ -173,7 +173,7 @@ UserPostingRouter.get('/', async (req: Request, res: Response) => {
     let userPostings = await UserPosting.find(query).limit(5).skip(5*Number(req.query.page)).sort(sortBy).populate('user', 'username');
     return res.json(userPostings);
   } catch (err) {
-    return res.status(500);
+    return res.sendStatus(500);
   }
 });
 

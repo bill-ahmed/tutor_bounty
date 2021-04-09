@@ -147,10 +147,7 @@ MeetingRouter.post('/:id/rate', bodyParser.json(), UserMeetingAccess, async (req
 
   // If this user already rated for this meeting, reject
   if(await UserRating.exists({ by: (req.user as any).id, meeting: meeting }))
-  {
-    console.log('rating already exists by user:', (req.user as any).id);
     return res.sendStatus(400);
-  }
 
   const hostId = meeting.host.toString();
   const otherId = hostId === (req.user as any).id.toString() ? meeting.tutor : meeting.host;
