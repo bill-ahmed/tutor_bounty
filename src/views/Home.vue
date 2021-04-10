@@ -62,7 +62,7 @@ export default Vue.extend({
 
 #bg_image {
   position: absolute;
-  opacity: 90%;
+  opacity: 0.9;
   right: 5%;
 
   top: 5%;
@@ -78,7 +78,7 @@ export default Vue.extend({
     width: 100%;
     right: 0; bottom: 0; left: 0;
 
-    opacity: 50%;
+    opacity: 0.5;
   }
 }
 </style>

@@ -115,7 +115,7 @@
       </v-row>
     </v-col>
 
-    <RateUser v-if="!loading" :open="ratingOpen" :ratingFor="isHost() ? meetingDetails.host.username : meetingDetails.tutor.username" :onSubmit="submitRating"/>
+    <RateUser v-if="!loading" :open="ratingOpen" :ratingFor="isHost() ? meetingDetails.tutor.username : meetingDetails.host.username" :onSubmit="submitRating"/>
   </v-container>
 </template>
 
