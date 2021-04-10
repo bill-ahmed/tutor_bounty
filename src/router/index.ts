@@ -24,7 +24,11 @@ const routes: Array<RouteConfig> = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    meta: {
+      auth: 'public'    /** Only allow user that are NOT logged-in. */,
+      title: 'Home Page'
+    }
   },
   {
     path: '/about',
@@ -144,7 +148,7 @@ router.beforeEach(async (to, from, next) => {
     if(user)
     {
       document.title = HOME_TITLE;
-      return next('/');
+      return router.push('/dashboard');
     }
 
     return next();
