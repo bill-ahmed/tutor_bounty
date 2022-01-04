@@ -1,3 +1,5 @@
+\*\*This was created as part of the course CSCC09 at the University of Toronto.\*\*
+
 ## Project Title
 Tutor Bounty
 
